@@ -14,22 +14,17 @@ public class Appointment {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "us_id")
+    @JoinColumn(name = "us_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "barb_id")
+    @JoinColumn(name = "barb_id", nullable = false)
     private Barber barber;
 
     @ManyToOne
-    @JoinColumn(name = "serv_id")
+    @JoinColumn(name = "serv_id", nullable = false)
     private Service service;
 
-    @ManyToOne
-    @JoinColumn(name = "sal_id")
-    private Salon salon;
-
-    @Column(name = "date")
     private LocalDate date;
 
     @Column(name = "start_time")
@@ -38,7 +33,6 @@ public class Appointment {
     @Column(name = "end_time")
     private LocalTime endTime;
 
-    @Column(name = "status")
     private String status;
 
     // Getters and Setters

@@ -2,6 +2,8 @@ package org.generation.italy.hairhub.model.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "reviews")
 public class Review {
@@ -12,16 +14,13 @@ public class Review {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "app_id")
+    @JoinColumn(name = "app_id", nullable = false)
     private Appointment appointment;
 
-    @Column(name = "date")
-    private String date; // You can change it to LocalDate
+    private LocalDate date;
 
-    @Column(name = "rating")
     private int rating;
 
-    @Column(name = "comment")
     private String comment;
 
     // Getters and Setters

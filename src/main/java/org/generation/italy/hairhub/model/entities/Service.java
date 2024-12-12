@@ -12,20 +12,12 @@ public class Service {
     @Column(name = "serv_id")
     private Long id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
     private String description;
 
     @Column(name = "img_url")
     private String imgUrl;
-
-    @ManyToMany(mappedBy = "services")
-    private Set<Salon> salons;
-
-    @OneToMany(mappedBy = "service")
-    private Set<Appointment> appointments;
 
     // Getters and Setters
 }

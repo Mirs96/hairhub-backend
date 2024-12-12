@@ -13,17 +13,12 @@ public class Barber {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sal_id")
+    @JoinColumn(name = "sal_id", nullable = false)
     private Salon salon;
 
-    @Column(name = "firstname")
     private String firstname;
 
-    @Column(name = "lastname")
     private String lastname;
-
-    @OneToMany(mappedBy = "barber")
-    private Set<Appointment> appointments;
 
     // Getters and Setters
 }
