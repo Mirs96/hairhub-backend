@@ -1,6 +1,8 @@
 package org.generation.italy.hairhub.model.entities;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -16,14 +18,12 @@ public class User {
 
     private String lastname;
 
-    private String dob; // You can use LocalDate instead if needed
+    private LocalDate dob; // You can use LocalDate instead if needed
 
     private String sex;
 
     @Column(unique = true)
     private String mail;
-
-    private String password;
 
     private String phone;
 

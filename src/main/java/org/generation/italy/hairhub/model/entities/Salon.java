@@ -1,6 +1,8 @@
 package org.generation.italy.hairhub.model.entities;
 
 import jakarta.persistence.*;
+
+import java.time.LocalTime;
 import java.util.Set;
 
 @Entity
@@ -26,10 +28,10 @@ public class Salon {
     private int closingDay;
 
     @Column(name = "opening_time")
-    private String openingTime;
+    private LocalTime openingTime;
 
     @Column(name = "closing_time")
-    private String closingTime;
+    private LocalTime closingTime;
 
     @OneToMany(mappedBy = "salon")
     private Set<Barber> barbers; //qui viene usato un set, valutare se cambiarlo in lista per semplificare o lasciare così
