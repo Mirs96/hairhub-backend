@@ -1,4 +1,4 @@
-package com.generation.italy.hairhub.model.entities;
+package org.generation.italy.hairhub.model.entities;
 
 import jakarta.persistence.*;
 import java.util.Set;
