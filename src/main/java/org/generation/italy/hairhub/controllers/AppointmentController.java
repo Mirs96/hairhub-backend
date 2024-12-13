@@ -1,7 +1,4 @@
 package org.generation.italy.hairhub.controllers;
 
-public class SalonController {
-
-
-
+public class AppointmentController {
 }

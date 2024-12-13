@@ -3,6 +3,7 @@ package org.generation.italy.hairhub.model.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -36,6 +37,7 @@ public class Salon {
     @OneToMany(mappedBy = "salon")
     private Set<Barber> barbers; //qui viene usato un set, valutare se cambiarlo in lista per semplificare o lasciare così
 
-
+    @OneToMany(mappedBy = "salon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SalonService> salonServices;
     // Getters and Setters
 }
