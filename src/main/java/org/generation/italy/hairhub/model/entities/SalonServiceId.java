@@ -25,4 +25,20 @@ public class SalonServiceId implements Serializable {
     public int hashCode() {
         return Objects.hash(salon, service);
     }
+
+    public Long getSalon() {
+        return salon;
+    }
+
+    public void setSalon(Long salon) {
+        this.salon = salon;
+    }
+
+    public Long getService() {
+        return service;
+    }
+
+    public void setService(Long service) {
+        this.service = service;
+    }
 }

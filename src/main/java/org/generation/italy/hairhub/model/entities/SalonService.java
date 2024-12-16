@@ -20,4 +20,37 @@ public class SalonService {
     private Service service;
 
     private BigDecimal price;
+
+    public SalonService(){}
+
+    public SalonService(Salon salon, Service service, BigDecimal price) {
+        this.salon = salon;
+        this.service = service;
+        this.price = price;
+    }
+
+    public Salon getSalon() {
+        return salon;
+    }
+
+    public void setSalon(Salon salon) {
+        this.salon = salon;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 }
+
