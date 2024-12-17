@@ -3,12 +3,11 @@ package org.generation.italy.hairhub.model.entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-
-
+//SISTEMARE IL PREZZO(BIGDECIMAL)
 @Entity
 @Table(name = "salon_services")
-@IdClass(SalonServiceId.class)
-public class SalonService {
+@IdClass(SalonTreatmentId.class)
+public class SalonTreatment {
     @Id
     @ManyToOne
     @JoinColumn(name = "sal_id", nullable = false)
@@ -17,15 +16,15 @@ public class SalonService {
     @Id
     @ManyToOne
     @JoinColumn(name = "serv_id", nullable = false)
-    private Service service;
+    private Treatment treatment;
 
     private BigDecimal price;
 
-    public SalonService(){}
+    public SalonTreatment(){}
 
-    public SalonService(Salon salon, Service service, BigDecimal price) {
+    public SalonTreatment(Salon salon, Treatment treatment, BigDecimal price) {
         this.salon = salon;
-        this.service = service;
+        this.treatment = treatment;
         this.price = price;
     }
 
@@ -37,12 +36,12 @@ public class SalonService {
         this.salon = salon;
     }
 
-    public Service getService() {
-        return service;
+    public Treatment getTreatment() {
+        return treatment;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setTreatment(Treatment treatment) {
+        this.treatment = treatment;
     }
 
     public BigDecimal getPrice() {

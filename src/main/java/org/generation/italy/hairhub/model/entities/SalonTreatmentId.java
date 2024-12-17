@@ -1,29 +1,27 @@
 package org.generation.italy.hairhub.model.entities;
 
-import jakarta.persistence.Embeddable;
-
 import java.io.Serializable;
 import java.util.Objects;
 
 
-public class SalonServiceId implements Serializable {
+public class SalonTreatmentId implements Serializable {
     private Long salon;
-    private Long service;
+    private Long treatment;
 
     // Default constructor, equals, and hashCode
-    public SalonServiceId(){}
+    public SalonTreatmentId(){}
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SalonServiceId that = (SalonServiceId) o;
-        return Objects.equals(salon, that.salon) && Objects.equals(service, that.service);
+        SalonTreatmentId that = (SalonTreatmentId) o;
+        return Objects.equals(salon, that.salon) && Objects.equals(treatment, that.treatment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(salon, service);
+        return Objects.hash(salon, treatment);
     }
 
     public Long getSalon() {
@@ -34,11 +32,11 @@ public class SalonServiceId implements Serializable {
         this.salon = salon;
     }
 
-    public Long getService() {
-        return service;
+    public Long getTreatment() {
+        return treatment;
     }
 
-    public void setService(Long service) {
-        this.service = service;
+    public void setTreatment(Long treatment) {
+        this.treatment = treatment;
     }
 }

@@ -1,21 +1,32 @@
 package org.generation.italy.hairhub.model.services;
 
 import org.generation.italy.hairhub.model.entities.Appointment;
+import org.generation.italy.hairhub.model.entities.Barber;
+import org.generation.italy.hairhub.model.entities.Treatment;
+import org.generation.italy.hairhub.model.entities.User;
+import org.generation.italy.hairhub.model.exceptions.EntityNotFoundException;
 import org.generation.italy.hairhub.model.repositories.AppointmentRepositoryJpa;
+import org.generation.italy.hairhub.model.repositories.BarberRepositoryJpa;
+import org.generation.italy.hairhub.model.repositories.TreatmentRepositoryJpa;
+import org.generation.italy.hairhub.model.repositories.UserRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.Optional;
 
 @Service
 public class AppointmentServiceJpa implements AppointmentService {
     private AppointmentRepositoryJpa appRepo;
+    private BarberRepositoryJpa barberRepo;
+    private TreatmentRepositoryJpa treatRepo;
+    private UserRepositoryJpa userRepo;
 
     @Autowired
-    public AppointmentServiceJpa(AppointmentRepositoryJpa appRepo) {
+    public AppointmentServiceJpa(AppointmentRepositoryJpa appRepo, BarberRepositoryJpa barberRepo, TreatmentRepositoryJpa treatRepo, UserRepositoryJpa userRepo) {
         this.appRepo = appRepo;
+        this.barberRepo = barberRepo;
+        this.treatRepo = treatRepo;
+        this.userRepo = userRepo;
     }
 
     @Override
@@ -30,9 +41,24 @@ public class AppointmentServiceJpa implements AppointmentService {
 //            }
         if (oa.isPresent()) {
             Appointment appointment = oa.get();
+            appointment.setStatus("Cancelled");
             Appointment updateAppointment = appRepo.save(appointment);
             return Optional.of(updateAppointment);
         }
         return Optional.empty();
+    }
+    @Override
+    public Appointment create(Appointment app, long barberId, long treatmentId, long userId) throws EntityNotFoundException{
+        Optional<Barber> ob = barberRepo.findById(barberId);
+        Optional<Treatment> ot = treatRepo.findById(treatmentId);
+        Optional<User> ou = userRepo.findById(userId);
+        if (ob.isEmpty() || ot.isEmpty() || ou.isEmpty()) {
+            throw new EntityNotFoundException("Entità non trovata", ob.isEmpty() ? Barber.class.getSimpleName() : (ot.isEmpty() ? Treatment.class.getSimpleName() : User.class.getSimpleName()));
+        }
+        app.setBarber(ob.get());
+        app.setTreatment(ot.get()); //.get() va a prendere il contenuto all'interno dell'Optional, perché non posso passare all'entità Appointment un Optional, ma solo il suo contenuto
+        app.setUser(ou.get());
+        app.setStatus("Confirmed");
+        return appRepo.save(app); //salva l'appuntamento sul db tramite il repository(il repository è quello che comunica col db)
     }
 }

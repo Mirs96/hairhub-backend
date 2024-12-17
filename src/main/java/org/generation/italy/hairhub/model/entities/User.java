@@ -17,6 +17,7 @@ public class User {
     private String firstname;
 
     private String lastname;
+    private String nickname;
 
     private LocalDate dob; // You can use LocalDate instead if needed
 
@@ -34,10 +35,11 @@ public class User {
 
     public User(){}
 
-    public User(Long id, String firstname, String lastname, LocalDate dob, String sex, String mail, String pass, String phone) {
+    public User(Long id, String firstname, String lastname, String nickname, LocalDate dob, String sex, String mail, String pass, String phone) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.nickname = nickname;
         this.dob = dob;
         this.sex = sex;
         this.mail = mail;
@@ -107,5 +109,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

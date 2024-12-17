@@ -23,7 +23,7 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "serv_id", nullable = false)
-    private Service service;
+    private Treatment treatment;
 
     private LocalDate date;
 
@@ -39,11 +39,11 @@ public class Appointment {
 
     public Appointment(){}
 
-    public Appointment(Long id, User user, Barber barber, Service service, LocalDate date, LocalTime startTime, LocalTime endTime, String status) {
+    public Appointment(Long id, User user, Barber barber, Treatment treatment, LocalDate date, LocalTime startTime, LocalTime endTime, String status) {
         this.id = id;
         this.user = user;
         this.barber = barber;
-        this.service = service;
+        this.treatment = treatment;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -74,12 +74,12 @@ public class Appointment {
         this.barber = barber;
     }
 
-    public Service getService() {
-        return service;
+    public Treatment getTreatment() {
+        return treatment;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setTreatment(Treatment treatment) {
+        this.treatment = treatment;
     }
 
     public LocalDate getDate() {

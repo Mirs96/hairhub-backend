@@ -3,11 +3,10 @@ package org.generation.italy.hairhub.model.entities;
 import jakarta.persistence.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "services")
-public class Service {
+public class Treatment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,20 +22,20 @@ public class Service {
 
     private int type; //1 = taglio capelli, 2 = barba
 
-    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SalonService> salonServices;
+    @OneToMany(mappedBy = "treatment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SalonTreatment> salonTreatments;
 
     // Getters and Setters
 
-    public Service(){}
+    public Treatment(){}
 
-    public Service(Long id, String name, String description, String imgUrl, int type, List<SalonService> salonServices) {
+    public Treatment(Long id, String name, String description, String imgUrl, int type, List<SalonTreatment> salonTreatments) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.imgUrl = imgUrl;
         this.type = type;
-        this.salonServices = salonServices;
+        this.salonTreatments = salonTreatments;
     }
 
     public int getType() {
@@ -79,11 +78,11 @@ public class Service {
         this.imgUrl = imgUrl;
     }
 
-    public List<SalonService> getSalonServices() {
-        return salonServices;
+    public List<SalonTreatment> getSalonServices() {
+        return salonTreatments;
     }
 
-    public void setSalonServices(List<SalonService> salonServices) {
-        this.salonServices = salonServices;
+    public void setSalonServices(List<SalonTreatment> salonTreatments) {
+        this.salonTreatments = salonTreatments;
     }
 }
