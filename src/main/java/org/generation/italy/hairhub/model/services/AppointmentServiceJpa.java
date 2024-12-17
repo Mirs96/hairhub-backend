@@ -59,6 +59,7 @@ public class AppointmentServiceJpa implements AppointmentService {
         app.setTreatment(ot.get()); //.get() va a prendere il contenuto all'interno dell'Optional, perché non posso passare all'entità Appointment un Optional, ma solo il suo contenuto
         app.setUser(ou.get());
         app.setStatus("Confirmed");
-        return appRepo.save(app); //salva l'appuntamento sul db tramite il repository(il repository è quello che comunica col db)
+        appRepo.save(app); //salva l'appuntamento sul db tramite il repository(il repository è quello che comunica col db)
+        return app;
     }
 }

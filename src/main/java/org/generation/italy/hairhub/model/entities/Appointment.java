@@ -11,7 +11,7 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "app_id")
-    private Long id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "us_id", nullable = false)
@@ -39,7 +39,7 @@ public class Appointment {
 
     public Appointment(){}
 
-    public Appointment(Long id, User user, Barber barber, Treatment treatment, LocalDate date, LocalTime startTime, LocalTime endTime, String status) {
+    public Appointment(long id, User user, Barber barber, Treatment treatment, LocalDate date, LocalTime startTime, LocalTime endTime, String status) {
         this.id = id;
         this.user = user;
         this.barber = barber;
@@ -54,7 +54,7 @@ public class Appointment {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
