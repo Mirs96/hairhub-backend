@@ -39,6 +39,7 @@ public class Salon {
 
     @OneToMany(mappedBy = "salon", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SalonService> salonServices;
+    // Getters and Setters
 
     public Salon(){}
 
@@ -55,90 +56,89 @@ public class Salon {
         this.barbers = barbers;
         this.salonServices = salonServices;
     }
-    // Getters and Setters
 
     public Long getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getCap() {
-        return cap;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public int getClosingDay() {
-        return closingDay;
-    }
-
-    public LocalTime getOpeningTime() {
-        return openingTime;
-    }
-
-    public LocalTime getClosingTime() {
-        return closingTime;
-    }
-
-    public Set<Barber> getBarbers() {
-        return barbers;
-    }
-
-    public List<SalonService> getSalonServices() {
-        return salonServices;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCity() {
+        return city;
     }
 
     public void setCity(String city) {
         this.city = city;
     }
 
+    public String getCap() {
+        return cap;
+    }
+
     public void setCap(String cap) {
         this.cap = cap;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public int getClosingDay() {
+        return closingDay;
     }
 
     public void setClosingDay(int closingDay) {
         this.closingDay = closingDay;
     }
 
+    public LocalTime getOpeningTime() {
+        return openingTime;
+    }
+
     public void setOpeningTime(LocalTime openingTime) {
         this.openingTime = openingTime;
+    }
+
+    public LocalTime getClosingTime() {
+        return closingTime;
     }
 
     public void setClosingTime(LocalTime closingTime) {
         this.closingTime = closingTime;
     }
 
+    public Set<Barber> getBarbers() {
+        return barbers;
+    }
+
     public void setBarbers(Set<Barber> barbers) {
         this.barbers = barbers;
+    }
+
+    public List<SalonService> getSalonServices() {
+        return salonServices;
     }
 
     public void setSalonServices(List<SalonService> salonServices) {

@@ -30,12 +30,12 @@ public class SalonServiceId implements Serializable {
         return salon;
     }
 
-    public Long getService() {
-        return service;
-    }
-
     public void setSalon(Long salon) {
         this.salon = salon;
+    }
+
+    public Long getService() {
+        return service;
     }
 
     public void setService(Long service) {
