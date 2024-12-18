@@ -3,6 +3,7 @@ package org.generation.italy.hairhub.controllers;
 import org.generation.italy.hairhub.dto.SalonDto;
 import org.generation.italy.hairhub.model.entities.Appointment;
 import org.generation.italy.hairhub.model.entities.Salon;
+import org.generation.italy.hairhub.model.entities.Treatment;
 import org.generation.italy.hairhub.model.services.AppointmentService;
 import org.generation.italy.hairhub.model.services.SalonService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -13,7 +13,7 @@ public class Salon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sal_id")
-    private Long id;
+    private long id;
 
     private String name;
 
@@ -43,7 +43,7 @@ public class Salon {
 
     public Salon(){}
 
-    public Salon(Long id, String name, String city, String cap, String address, String phone, int closingDay, LocalTime openingTime, LocalTime closingTime, Set<Barber> barbers, List<SalonTreatment> salonTreatments) {
+    public Salon(long id, String name, String city, String cap, String address, String phone, int closingDay, LocalTime openingTime, LocalTime closingTime, Set<Barber> barbers, List<SalonTreatment> salonTreatments) {
         this.id = id;
         this.name = name;
         this.city = city;
@@ -57,91 +57,71 @@ public class Salon {
         this.salonTreatments = salonTreatments;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getCity() {
         return city;
     }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public String getCap() {
         return cap;
     }
-
-    public void setCap(String cap) {
-        this.cap = cap;
-    }
-
     public String getAddress() {
         return address;
     }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getPhone() {
         return phone;
     }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public int getClosingDay() {
         return closingDay;
     }
-
-    public void setClosingDay(int closingDay) {
-        this.closingDay = closingDay;
-    }
-
     public LocalTime getOpeningTime() {
         return openingTime;
     }
-
-    public void setOpeningTime(LocalTime openingTime) {
-        this.openingTime = openingTime;
-    }
-
     public LocalTime getClosingTime() {
         return closingTime;
     }
-
-    public void setClosingTime(LocalTime closingTime) {
-        this.closingTime = closingTime;
-    }
-
     public Set<Barber> getBarbers() {
         return barbers;
     }
-
-    public void setBarbers(Set<Barber> barbers) {
-        this.barbers = barbers;
-    }
-
-    public List<SalonTreatment> getSalonServices() {
+    public List<SalonTreatment> getSalonTreatments() {
         return salonTreatments;
     }
 
-    public void setSalonServices(List<SalonTreatment> salonTreatments) {
+    public void setId(long id) {
+        this.id = id;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public void setCap(String cap) {
+        this.cap = cap;
+    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    public void setClosingDay(int closingDay) {
+        this.closingDay = closingDay;
+    }
+    public void setOpeningTime(LocalTime openingTime) {
+        this.openingTime = openingTime;
+    }
+    public void setClosingTime(LocalTime closingTime) {
+        this.closingTime = closingTime;
+    }
+    public void setBarbers(Set<Barber> barbers) {
+        this.barbers = barbers;
+    }
+    public void setSalonTreatments(List<SalonTreatment> salonTreatments) {
         this.salonTreatments = salonTreatments;
     }
 }

@@ -5,8 +5,8 @@ import java.util.Objects;
 
 
 public class SalonTreatmentId implements Serializable {
-    private Long salon;
-    private Long treatment;
+    private long salon;
+    private long treatment;
 
     // Default constructor, equals, and hashCode
     public SalonTreatmentId(){}
@@ -24,19 +24,17 @@ public class SalonTreatmentId implements Serializable {
         return Objects.hash(salon, treatment);
     }
 
-    public Long getSalon() {
+    public long getSalon() {
         return salon;
     }
-
-    public void setSalon(Long salon) {
-        this.salon = salon;
-    }
-
-    public Long getTreatment() {
+    public long getTreatment() {
         return treatment;
     }
 
-    public void setTreatment(Long treatment) {
+    public void setSalon(long salon) {
+        this.salon = salon;
+    }
+    public void setTreatment(long treatment) {
         this.treatment = treatment;
     }
 }

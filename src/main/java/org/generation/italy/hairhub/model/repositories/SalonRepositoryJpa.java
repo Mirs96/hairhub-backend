@@ -1,6 +1,7 @@
 package org.generation.italy.hairhub.model.repositories;
 
 import org.generation.italy.hairhub.model.entities.Salon;
+import org.generation.italy.hairhub.model.entities.Treatment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

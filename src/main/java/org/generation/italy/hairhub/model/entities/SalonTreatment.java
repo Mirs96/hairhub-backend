@@ -1,11 +1,12 @@
 package org.generation.italy.hairhub.model.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Check;
 
 import java.math.BigDecimal;
-//SISTEMARE IL PREZZO(BIGDECIMAL)
 @Entity
 @Table(name = "salon_services")
+@Check(constraints = "price > 0")
 @IdClass(SalonTreatmentId.class)
 public class SalonTreatment {
     @Id
@@ -31,23 +32,19 @@ public class SalonTreatment {
     public Salon getSalon() {
         return salon;
     }
-
-    public void setSalon(Salon salon) {
-        this.salon = salon;
-    }
-
     public Treatment getTreatment() {
         return treatment;
     }
-
-    public void setTreatment(Treatment treatment) {
-        this.treatment = treatment;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
 
+    public void setSalon(Salon salon) {
+        this.salon = salon;
+    }
+    public void setTreatment(Treatment treatment) {
+        this.treatment = treatment;
+    }
     public void setPrice(BigDecimal price) {
         this.price = price;
     }

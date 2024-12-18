@@ -57,35 +57,33 @@ public class AppointmentDto {
     public long getId() {
         return id;
     }
-
+    public long getUserId() {
+        return userId;
+    }
+    public String getUserName() {
+        return userName;
+    }
     public long getBarberId() {
         return barberId;
     }
-
     public String getBarberName() {
         return barberName;
     }
-
     public long getTreatmentId() {
         return treatmentId;
     }
-
     public String getTreatmentName() {
         return treatmentName;
     }
-
     public String getDate() {
         return date;
     }
-
     public String getStartTime() {
         return startTime;
     }
-
     public String getEndTime() {
         return endTime;
     }
-
     public String getStatus() {
         return status;
     }
@@ -93,51 +91,33 @@ public class AppointmentDto {
     public void setId(long id) {
         this.id = id;
     }
-
     public void setBarberId(long barberId) {
         this.barberId = barberId;
     }
-
     public void setBarberName(String barberName) {
         this.barberName = barberName;
     }
-
     public void setTreatmentId(long treatmentId) {
         this.treatmentId = treatmentId;
     }
-
     public void setTreatmentName(String treatmentName) {
         this.treatmentName = treatmentName;
     }
-
     public void setDate(String date) {
         this.date = date;
     }
-
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public String getUserName() {
-        return userName;
-    }
-
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
-    public long getUserId() {
-        return userId;
-    }
-
     public void setUserId(long userId) {
         this.userId = userId;
     }

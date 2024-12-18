@@ -1,11 +1,14 @@
 package org.generation.italy.hairhub.model.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Check;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 @Table(name = "appointments")
+@Check(constraints = "status in ('Confirmed', 'Cancelled')") //dà un vincolo sul database allo status, può essere solo confirmed o cancelled
 public class Appointment {
 
     @Id
@@ -50,66 +53,52 @@ public class Appointment {
         this.status = status;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
+    }
+    public User getUser() {
+        return user;
+    }
+    public Barber getBarber() {
+        return barber;
+    }
+    public Treatment getTreatment() {
+        return treatment;
+    }
+    public LocalDate getDate() {
+        return date;
+    }
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+    public String getStatus() {
+        return status;
     }
 
     public void setId(long id) {
         this.id = id;
     }
-
-    public User getUser() {
-        return user;
-    }
-
     public void setUser(User user) {
         this.user = user;
     }
-
-    public Barber getBarber() {
-        return barber;
-    }
-
     public void setBarber(Barber barber) {
         this.barber = barber;
     }
-
-    public Treatment getTreatment() {
-        return treatment;
-    }
-
     public void setTreatment(Treatment treatment) {
         this.treatment = treatment;
     }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
     public void setDate(LocalDate date) {
         this.date = date;
     }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
-
-    public String getStatus() {
-        return status;
-    }
-
     public void setStatus(String status) {
         this.status = status;
     }

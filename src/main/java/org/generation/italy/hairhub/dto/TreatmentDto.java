@@ -1,44 +1,36 @@
-package org.generation.italy.hairhub.model.entities;
+package org.generation.italy.hairhub.dto;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.Check;
-import org.hibernate.annotations.processing.CheckHQL;
+import org.generation.italy.hairhub.model.TreatmentWithPrice;
+import org.generation.italy.hairhub.model.entities.SalonTreatment;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-@Entity
-@Table(name = "services")
-@Check(constraints = "type in (1,2)")
-public class Treatment {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "serv_id")
+public class TreatmentDto {
     private long id;
-
     private String name;
-
     private String description;
-
-    @Column(name = "img_url")
     private String imgUrl;
-
     private int type; //1 = taglio capelli, 2 = barba
+    private BigDecimal price;
 
-    @OneToMany(mappedBy = "treatment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SalonTreatment> salonTreatments;
-
-    // Getters and Setters
-
-    public Treatment(){}
-
-    public Treatment(long id, String name, String description, String imgUrl, int type, List<SalonTreatment> salonTreatments) {
+    public TreatmentDto(){}
+    public TreatmentDto(long id, String name, String description, String imgUrl, int type, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.imgUrl = imgUrl;
         this.type = type;
-        this.salonTreatments = salonTreatments;
+        this.price = price;
+    }
+
+    public TreatmentDto(TreatmentWithPrice t){
+        this.id = t.getTreatment().getId();
+        this.name = t.getTreatment().getName();
+        this.description = t.getTreatment().getDescription();
+        this.imgUrl = t.getTreatment().getImgUrl();
+        this.type = t.getTreatment().getType();
+        this.price = t.getPrice();
     }
 
     public long getId() {
@@ -56,8 +48,8 @@ public class Treatment {
     public int getType() {
         return type;
     }
-    public List<SalonTreatment> getSalonTreatments() {
-        return salonTreatments;
+    public BigDecimal getPrice() {
+        return price;
     }
 
     public void setId(long id) {
@@ -75,7 +67,7 @@ public class Treatment {
     public void setType(int type) {
         this.type = type;
     }
-    public void setSalonTreatments(List<SalonTreatment> salonTreatments) {
-        this.salonTreatments = salonTreatments;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

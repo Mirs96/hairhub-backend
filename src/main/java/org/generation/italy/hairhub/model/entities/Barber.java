@@ -10,7 +10,7 @@ public class Barber {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "barb_id")
-    private Long id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "sal_id", nullable = false)
@@ -24,41 +24,35 @@ public class Barber {
 
     public Barber(){}
 
-    public Barber(Long id, Salon salon, String firstname, String lastname) {
+    public Barber(long id, Salon salon, String firstname, String lastname) {
         this.id = id;
         this.salon = salon;
         this.firstname = firstname;
         this.lastname = lastname;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Salon getSalon() {
         return salon;
     }
-
-    public void setSalon(Salon salon) {
-        this.salon = salon;
-    }
-
     public String getFirstname() {
         return firstname;
     }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
     public String getLastname() {
         return lastname;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+    public void setSalon(Salon salon) {
+        this.salon = salon;
+    }
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
