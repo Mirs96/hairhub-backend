@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins="http://localhost:4200/", allowedHeaders = "*")
 @RestController
 @RequestMapping("/salon")
 public class SalonController {
@@ -23,11 +24,26 @@ public class SalonController {
         this.salonService = salonService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<SalonDto>> getTopSalonsByServiceType(@RequestParam(required = false)Integer type){
-        List<Salon> salons = salonService.getTopSalons(type);
-        List<SalonDto> dto = salons.stream()
-                .map(SalonDto::new).toList();
-        return ResponseEntity.ok(dto);
+    @GetMapping("/bestSalons")
+    public ResponseEntity<List<SalonDto>> searchBestSalons(@RequestParam(required = false) Integer type,
+                                                           @RequestParam(required = false) Integer num){
+        int numResult = num != null && num > 0 && num < 11? num : 5;
+        List<Salon> salons = salonService.getTopSalons(type,numResult);
+        return ResponseEntity.ok(SalonDto.fromSalons(salons));
     }
+
+    @GetMapping
+    public ResponseEntity<List<SalonDto>> searchSalons(@RequestParam(required = false) String name){
+        List<Salon> salons = salonService.getSalonsByNameOrAddress(name);
+        return ResponseEntity.ok(SalonDto.fromSalons(salons));
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SalonDto> getSalonById(@RequestParam(required = true) long id){
+        Optional<Salon> oS = salonService.getSalonById(id);
+        return oS.map(salon -> ResponseEntity.ok(new SalonDto(salon)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }

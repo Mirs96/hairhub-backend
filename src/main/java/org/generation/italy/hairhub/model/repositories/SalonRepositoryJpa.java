@@ -16,11 +16,26 @@ public interface SalonRepositoryJpa extends JpaRepository<Salon, Long> {
     JOIN r.appointment a
     JOIN a.barber b
     JOIN b.salon s
-    LEFT JOIN a.treatment serv
+    JOIN a.treatment serv
     WHERE (:type IS NULL OR serv.type = :type)
     GROUP BY s
     ORDER BY AVG(r.rating) DESC
-    LIMIT 5
+    LIMIT :num
     """)
-    List<Salon> getSalonsByOptionalServiceType(@Param("type") Integer type);
+    List<Salon> getSalonsByOptionalServiceType(@Param("type") Integer type,@Param("num") int num);
+
+    @Query("""
+    SELECT s
+    FROM Salon s
+    WHERE (:toSearch IS NULL OR :toSearch = ''
+           OR LOWER(s.name) LIKE LOWER(CONCAT('%', :toSearch, '%'))
+           OR LOWER(s.city) LIKE LOWER(CONCAT('%', :toSearch, '%'))
+           OR LOWER(s.cap) LIKE LOWER(CONCAT('%', :toSearch, '%'))
+           OR LOWER(s.address) LIKE LOWER(CONCAT('%', :toSearch, '%')))
+  """
+    )
+    List<Salon> searchByNameOrAddress(@Param("toSearch") String searchString);
+
+    @Query("SELECT s FROM Salon s WHERE :treatmentId = ANY (SELECT t.id FROM s.treatments t)")
+    List<Salon> findByTreatmentId(@Param("treatmentId") long treatmentId);
 }
