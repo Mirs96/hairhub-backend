@@ -12,7 +12,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Optional;
+@CrossOrigin(origins="http://localhost:4200", allowedHeaders = "*")
 @RestController
+
 @RequestMapping("/appointment")
 public class AppointmentController {
     private AppointmentService appointmentService;
