@@ -12,6 +12,7 @@ import org.generation.italy.hairhub.model.repositories.UserRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,15 +49,19 @@ public class AppointmentServiceJpa implements AppointmentService {
         return Optional.empty();
     }
     @Override
-    public Appointment create(Appointment app, long barberId, long treatmentId, long userId) throws EntityNotFoundException{
-        Optional<Barber> ob = barberRepo.findById(barberId);
-        Optional<Treatment> ot = treatRepo.findById(treatmentId);
+    public Appointment create(Appointment app, long barberId, List<Long> treatmentsId, long userId) throws EntityNotFoundException{
+        Optional<Barber> ob = barberRepo.findById(barberId);//trova tutte le prenotazioni con gli id specificati
         Optional<User> ou = userRepo.findById(userId);
-        if (ob.isEmpty() || ot.isEmpty() || ou.isEmpty()) {
-            throw new EntityNotFoundException("Entità non trovata", ob.isEmpty() ? Barber.class.getSimpleName() : (ot.isEmpty() ? Treatment.class.getSimpleName() : User.class.getSimpleName()));
+        if (ob.isEmpty() || ou.isEmpty()) {
+            throw new EntityNotFoundException("Entità non trovata", ob.isEmpty() ? Barber.class.getSimpleName() : User.class.getSimpleName());
         }
+        List<Treatment> treatments = treatRepo.findAllById(treatmentsId);
+        if(treatments.size() !=treatmentsId.size()){
+            throw new EntityNotFoundException("Treatment non trovati", null);
+        }
+        app.setTreatments(treatments);
         app.setBarber(ob.get());
-        app.setTreatment(ot.get()); //.get() va a prendere il contenuto all'interno dell'Optional, perché non posso passare all'entità Appointment un Optional, ma solo il suo contenuto
+        //.get() va a prendere il contenuto all'interno dell'Optional, perché non posso passare all'entità Appointment un Optional, ma solo il suo contenuto
         app.setUser(ou.get());
         app.setStatus("Confirmed");
         appRepo.save(app); //salva l'appuntamento sul db tramite il repository(il repository è quello che comunica col db)

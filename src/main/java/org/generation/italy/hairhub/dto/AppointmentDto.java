@@ -1,11 +1,13 @@
 package org.generation.italy.hairhub.dto;
 
+import org.generation.italy.hairhub.model.TreatmentWithPrice;
 import org.generation.italy.hairhub.model.entities.Appointment;
 import org.generation.italy.hairhub.model.entities.Barber;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class AppointmentDto {
     private long id;
@@ -13,26 +15,25 @@ public class AppointmentDto {
     private long userId;
     private long barberId;
     private String barberName;
-    private long treatmentId;
-    private String treatmentName;
     private String date;
     private String startTime;
     private String endTime;
     private String status;
+    private List<TreatmentWithPrice> treatments;
+
 
     public AppointmentDto(){}
-    public AppointmentDto(long id, String userName, long userId, long barberId, String barberName, long treatmentId, String treatmentName, String date, String startTime, String endTime, String status) {
+    public AppointmentDto(long id, String userName, long userId, long barberId, String barberName, String date, String startTime, String endTime, String status,List<TreatmentWithPrice> treatments) {
         this.id = id;
         this.userName = userName;
         this.userId = userId;
         this.barberId = barberId;
         this.barberName = barberName;
-        this.treatmentId = treatmentId;
-        this.treatmentName = treatmentName;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
+        this.treatments = treatments;
     }
 
     public Appointment toAppointment() { //restituisce un appointment da un dto
@@ -42,16 +43,16 @@ public class AppointmentDto {
         appointment.setStartTime(LocalTime.parse(this.startTime));
         appointment.setEndTime(LocalTime.parse(this.endTime));
         appointment.setStatus(this.status);
+
         return appointment;
     }
     public static AppointmentDto fromAppointment(Appointment app) { //restituire appdto da appointment dato in input
         return new AppointmentDto(app.getId(), app.getUser().getNickname(), app.getUser().getId(), app.getBarber().getId(),
                 String.format("%s %s", app.getBarber().getFirstname(), app.getBarber().getLastname()),
-                app.getTreatment().getId(), app.getTreatment().getName(),
                 app.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE),
                 app.getStartTime().format(DateTimeFormatter.ISO_LOCAL_TIME),
                 app.getEndTime().format(DateTimeFormatter.ISO_LOCAL_TIME),
-                app.getStatus());
+                app.getStatus()),app.getTreatments().stream().map(t -> new TreatmentDto(t.getId(),t.getName(),t.getDescription(),t.getImgUrl(),t.getType(),t.getSalonTreatments()).getId());
     }
 
     public long getId() {
@@ -69,12 +70,6 @@ public class AppointmentDto {
     public String getBarberName() {
         return barberName;
     }
-    public long getTreatmentId() {
-        return treatmentId;
-    }
-    public String getTreatmentName() {
-        return treatmentName;
-    }
     public String getDate() {
         return date;
     }
@@ -88,6 +83,14 @@ public class AppointmentDto {
         return status;
     }
 
+    public List<TreatmentWithPrice> getTreatments() {
+        return treatments;
+    }
+
+    public void setTreatments(List<TreatmentWithPrice> treatments) {
+        this.treatments = treatments;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -96,12 +99,6 @@ public class AppointmentDto {
     }
     public void setBarberName(String barberName) {
         this.barberName = barberName;
-    }
-    public void setTreatmentId(long treatmentId) {
-        this.treatmentId = treatmentId;
-    }
-    public void setTreatmentName(String treatmentName) {
-        this.treatmentName = treatmentName;
     }
     public void setDate(String date) {
         this.date = date;

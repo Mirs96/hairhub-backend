@@ -1,6 +1,7 @@
 package org.generation.italy.hairhub.controllers;
 
 import org.generation.italy.hairhub.dto.AppointmentDto;
+import org.generation.italy.hairhub.dto.TreatmentDto;
 import org.generation.italy.hairhub.model.entities.Appointment;
 import org.generation.italy.hairhub.model.exceptions.EntityNotFoundException;
 import org.generation.italy.hairhub.model.services.AppointmentService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 @CrossOrigin(origins="http://localhost:4200", allowedHeaders = "*")
 @RestController
@@ -34,7 +36,8 @@ public class AppointmentController {
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDto appDto, UriComponentsBuilder uriBuilder) {
         Appointment app = appDto.toAppointment();
         try {
-            appointmentService.create(app, appDto.getBarberId(), appDto.getTreatmentId(), appDto.getUserId());
+            List<Long> treatmentsId = appDto.getTreatments().stream().map(TreatmentDto::getId).toList();
+            appointmentService.create(app, appDto.getBarberId(),treatmentsId, appDto.getUserId());
             URI location = uriBuilder.path("/appointment/{id}").buildAndExpand(app.getId()).toUri();
             return ResponseEntity.created(location).body(AppointmentDto.fromAppointment(app));
         } catch (EntityNotFoundException e) {
