@@ -60,8 +60,8 @@ public class AppointmentServiceJpa implements AppointmentService {
             throw new EntityNotFoundException("Entità non trovata", ob.isEmpty() ? Barber.class.getSimpleName() : User.class.getSimpleName());
         }
         List<Treatment> treatments = treatRepo.findAllById(treatmentsId);
-        if(treatments.size() !=treatmentsId.size()){
-            throw new EntityNotFoundException("Treatment non trovati", treatments.getClass().getSimpleName());
+        if(treatments.size() != treatmentsId.size()){
+            throw new EntityNotFoundException("Treatment non trovati", null);
         }
         app.setTreatments(treatments);
         app.setBarber(ob.get());
@@ -78,17 +78,13 @@ public class AppointmentServiceJpa implements AppointmentService {
 
         return new AppointmentWithPrices(
                 app.getId(),
-                app.getUser().getNickname(),
-                app.getUser().getId(),
-                app.getBarber().getId(),
-                String.format("%s %s", app.getBarber().getFirstname(), app.getBarber().getLastname()),
-                app.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE),
-                app.getStartTime().format(DateTimeFormatter.ISO_LOCAL_TIME),
-                app.getEndTime().format(DateTimeFormatter.ISO_LOCAL_TIME),
-                app.getStatus(),
-                treatmentsWithPrice
+                app.getUser(),
+                app.getBarber(),
+                treatmentsWithPrice,
+                app.getDate(),
+                app.getStartTime(),
+                app.getEndTime(),
+                app.getStatus()
         );
-
-
     }
 }
