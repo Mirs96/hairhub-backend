@@ -1,5 +1,6 @@
 package org.generation.italy.hairhub.dto;
 
+import org.generation.italy.hairhub.model.AppointmentWithPrices;
 import org.generation.italy.hairhub.model.TreatmentWithPrice;
 import org.generation.italy.hairhub.model.entities.Appointment;
 import org.generation.italy.hairhub.model.entities.Barber;
@@ -19,11 +20,11 @@ public class AppointmentDto {
     private String startTime;
     private String endTime;
     private String status;
-    private List<TreatmentWithPrice> treatments;
+    private List<TreatmentDto> treatments;
 
 
     public AppointmentDto(){}
-    public AppointmentDto(long id, String userName, long userId, long barberId, String barberName, String date, String startTime, String endTime, String status,List<TreatmentWithPrice> treatments) {
+    public AppointmentDto(long id, String userName, long userId, long barberId, String barberName, String date, String startTime, String endTime, String status,List<TreatmentDto> treatments) {
         this.id = id;
         this.userName = userName;
         this.userId = userId;
@@ -46,13 +47,14 @@ public class AppointmentDto {
 
         return appointment;
     }
-    public static AppointmentDto fromAppointment(Appointment app) { //restituire appdto da appointment dato in input
+
+    public static AppointmentDto fromAppointmentWithPrice(AppointmentWithPrices app) { //restituire appdto da appointmentWithPrices dato in input
         return new AppointmentDto(app.getId(), app.getUser().getNickname(), app.getUser().getId(), app.getBarber().getId(),
                 String.format("%s %s", app.getBarber().getFirstname(), app.getBarber().getLastname()),
                 app.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE),
                 app.getStartTime().format(DateTimeFormatter.ISO_LOCAL_TIME),
                 app.getEndTime().format(DateTimeFormatter.ISO_LOCAL_TIME),
-                app.getStatus()),app.getTreatments().stream().map(t -> new TreatmentDto(t.getId(),t.getName(),t.getDescription(),t.getImgUrl(),t.getType(),t.getSalonTreatments()).getId());
+                app.getStatus(), app.getTreatments().stream().map(TreatmentDto::new).toList());
     }
 
     public long getId() {
@@ -83,11 +85,11 @@ public class AppointmentDto {
         return status;
     }
 
-    public List<TreatmentWithPrice> getTreatments() {
+    public List<TreatmentDto> getTreatments() {
         return treatments;
     }
 
-    public void setTreatments(List<TreatmentWithPrice> treatments) {
+    public void setTreatments(List<TreatmentDto> treatments) {
         this.treatments = treatments;
     }
 
