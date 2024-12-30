@@ -16,13 +16,8 @@ import java.util.List;
 public class TreatmentController {
     TreatmentService treatmentService;
     @Autowired
-    public TreatmentController(TreatmentServiceJpa treatmentServiceJpa) {
-        this.treatmentService = treatmentServiceJpa;
+    public TreatmentController(TreatmentService treatmentService) {
+        this.treatmentService = treatmentService;
     }
-    @GetMapping("/{id}/treatments")
-    public ResponseEntity<List<TreatmentDto>> getTreatmentsBySalon(@PathVariable long id){
-        List<TreatmentWithPrice> treatments = treatmentService.getTreatmentBySalon(id);
-        List<TreatmentDto> dtos = treatments.stream().map(TreatmentDto::new).toList();
-        return ResponseEntity.ok(dtos);
-    }
+
 }

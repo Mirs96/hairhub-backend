@@ -1,30 +1,40 @@
 package org.generation.italy.hairhub.model.services;
 
+import org.generation.italy.hairhub.model.TreatmentWithPrice;
 import org.generation.italy.hairhub.model.entities.Salon;
 import org.generation.italy.hairhub.model.entities.Treatment;
 import org.generation.italy.hairhub.model.repositories.SalonRepositoryJpa;
+import org.generation.italy.hairhub.model.repositories.SalonTreatmentRepositoryJpa;
+import org.generation.italy.hairhub.model.repositories.TreatmentRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class SalonServiceJpa implements SalonService {
     SalonRepositoryJpa salonRepo;
+    SalonTreatmentRepositoryJpa salonTreatRepo;
+    TreatmentRepositoryJpa treatRepo;
+
     @Autowired
-    public SalonServiceJpa(SalonRepositoryJpa salonRepo) {
+    public SalonServiceJpa(SalonRepositoryJpa salonRepo, SalonTreatmentRepositoryJpa salonTreatRepo, TreatmentRepositoryJpa treatRepo) {
         this.salonRepo = salonRepo;
+        this.salonTreatRepo = salonTreatRepo;
+        this.treatRepo = treatRepo;
     }
+
     @Override
     public List<Salon> getTopSalons(Integer type, int num) {
-        return  salonRepo.getSalonsByOptionalServiceType(type,num);
+        return salonRepo.getSalonsByOptionalServiceType(type,num);
     }
 
     @Override
     public List<Salon> getSalonsByNameOrAddress(String name) {
-        List<Salon> salons = salonRepo.searchByNameOrAddress(name);
-        return  salons;
+        return salonRepo.searchByNameOrAddress(name);
     }
 
     @Override
@@ -35,5 +45,17 @@ public class SalonServiceJpa implements SalonService {
     @Override
     public List<Salon> getSalonsByTreatmentId(long treatmentId) {
         return salonRepo.findByTreatmentId(treatmentId);
+    }
+
+    @Override
+    public List<TreatmentWithPrice> getTreatmentBySalon(long salonId) {
+        List<Treatment> allTreatment = treatRepo.findAll();
+        List<TreatmentWithPrice> treatsWPrice = new ArrayList<>();
+        for (Treatment treatment : allTreatment) {
+            BigDecimal price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(salonId, treatment.getId());
+            TreatmentWithPrice treatWPrice = new TreatmentWithPrice(treatment, price);
+            treatsWPrice.add(treatWPrice);
+        }
+        return treatsWPrice;
     }
 }

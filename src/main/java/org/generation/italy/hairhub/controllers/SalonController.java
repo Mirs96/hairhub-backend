@@ -1,6 +1,8 @@
 package org.generation.italy.hairhub.controllers;
 
 import org.generation.italy.hairhub.dto.SalonDto;
+import org.generation.italy.hairhub.dto.TreatmentDto;
+import org.generation.italy.hairhub.model.TreatmentWithPrice;
 import org.generation.italy.hairhub.model.entities.Appointment;
 import org.generation.italy.hairhub.model.entities.Salon;
 import org.generation.italy.hairhub.model.entities.Treatment;
@@ -38,7 +40,6 @@ public class SalonController {
         return ResponseEntity.ok(SalonDto.fromSalons(salons));
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<SalonDto> getSalonById(@RequestParam(required = true) long id){
         Optional<Salon> oS = salonService.getSalonById(id);
@@ -46,4 +47,10 @@ public class SalonController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{id}/treatments")
+    public ResponseEntity<List<TreatmentDto>> getTreatmentsBySalon(@PathVariable long id){
+        List<TreatmentWithPrice> treatments = salonService.getTreatmentBySalon(id);
+        List<TreatmentDto> dtos = treatments.stream().map(TreatmentDto::new).toList();
+        return ResponseEntity.ok(dtos);
+    }
 }

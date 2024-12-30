@@ -22,7 +22,7 @@ public class BarberController {
     @GetMapping("/{salonId}/barbers")
     public ResponseEntity<List<BarberDto>> getBarbersBySalon (@PathVariable long salonId){
         List<Barber> barbers = barberService.getAllBarbersBySalonId(salonId);
-        List<BarberDto> dtos = barbers.stream().map(BarberDto :: new).toList();
+        List<BarberDto> dtos = barbers.stream().map(BarberDto::new).toList();
         return ResponseEntity.ok(dtos);
     }
 }

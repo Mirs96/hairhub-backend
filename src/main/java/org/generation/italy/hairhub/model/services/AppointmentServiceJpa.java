@@ -52,17 +52,19 @@ public class AppointmentServiceJpa implements AppointmentService {
         }
         return Optional.empty();
     }
+
     @Override
-    public AppointmentWithPrices create(Appointment app, long barberId, List<Long> treatmentsId, long userId) throws EntityNotFoundException{
+    public AppointmentWithPrices create(Appointment app, long barberId, List<Long> treatmentIds, long userId) throws EntityNotFoundException{
         Optional<Barber> ob = barberRepo.findById(barberId);//trova tutte le prenotazioni con gli id specificati
         Optional<User> ou = userRepo.findById(userId);
         if (ob.isEmpty() || ou.isEmpty()) {
             throw new EntityNotFoundException("Entità non trovata", ob.isEmpty() ? Barber.class.getSimpleName() : User.class.getSimpleName());
         }
-        List<Treatment> treatments = treatRepo.findAllById(treatmentsId);
-        if(treatments.size() != treatmentsId.size()){
+        List<Treatment> treatments = treatRepo.findAllById(treatmentIds);
+        if(treatments.size() != treatmentIds.size()){
             throw new EntityNotFoundException("Treatment non trovati", null);
         }
+
         app.setTreatments(treatments);
         app.setBarber(ob.get());
         //.get() va a prendere il contenuto all'interno dell'Optional, perché non posso passare all'entità Appointment un Optional, ma solo il suo contenuto
