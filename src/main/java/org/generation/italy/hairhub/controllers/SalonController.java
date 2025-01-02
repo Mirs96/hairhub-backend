@@ -41,7 +41,7 @@ public class SalonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SalonDto> getSalonById(@RequestParam(required = true) long id){
+    public ResponseEntity<SalonDto> getSalonById(@PathVariable long id){
         Optional<Salon> oS = salonService.getSalonById(id);
         return oS.map(salon -> ResponseEntity.ok(new SalonDto(salon)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
