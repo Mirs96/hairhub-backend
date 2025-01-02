@@ -15,6 +15,6 @@ public interface SalonTreatmentRepositoryJpa extends JpaRepository<SalonTreatmen
             where st.salon.id = :salonId
             and st.treatment.id = :treatmentId
             """)
-    BigDecimal getPriceBySalonIdAndTreatmentId(@Param("salonId") long salonId, @Param("treatmentId") long treatmentId);
+    double getPriceBySalonIdAndTreatmentId(@Param("salonId") long salonId, @Param("treatmentId") long treatmentId);
 
 }

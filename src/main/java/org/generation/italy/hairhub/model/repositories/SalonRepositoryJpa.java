@@ -15,11 +15,11 @@ public interface SalonRepositoryJpa extends JpaRepository<Salon, Long> {
                 JOIN r.appointment a
                 JOIN a.barber b
                 JOIN b.salon s
-                JOIN a.treatment t
+                JOIN a.treatments t
                 WHERE (:type IS NULL
-                    OR type IN (
-                        SELECT treat.type
-                        FROM a.treatment treat
+                    OR :type IN (
+                        SELECT t2.type
+                        FROM a.treatments t2
                     )
                 )
                 GROUP BY s

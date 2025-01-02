@@ -52,7 +52,8 @@ public class SalonServiceJpa implements SalonService {
         List<Treatment> allTreatment = treatRepo.findAll();
         List<TreatmentWithPrice> treatsWPrice = new ArrayList<>();
         for (Treatment treatment : allTreatment) {
-            BigDecimal price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(salonId, treatment.getId());
+            double price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(salonId, treatment.getId());
+
             TreatmentWithPrice treatWPrice = new TreatmentWithPrice(treatment, price);
             treatsWPrice.add(treatWPrice);
         }

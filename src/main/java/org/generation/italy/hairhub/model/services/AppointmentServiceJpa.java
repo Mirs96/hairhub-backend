@@ -74,7 +74,7 @@ public class AppointmentServiceJpa implements AppointmentService {
 
         List<TreatmentWithPrice> treatmentsWithPrice = new ArrayList<>();
         for (Treatment treatment : treatments) {
-            BigDecimal price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(app.getBarber().getSalon().getId(), treatment.getId());
+            double price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(app.getBarber().getSalon().getId(), treatment.getId());
             treatmentsWithPrice.add(new TreatmentWithPrice(treatment, price));
         }
 

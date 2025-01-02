@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TreatmentRepositoryJpa extends JpaRepository<Treatment, Long> {
-    List<Treatment> findAllById(List<Long> treatmentsId);
+
     List<Treatment> findAll();
 }
