@@ -28,7 +28,7 @@ public class Appointment {
 
     @ManyToMany
     @JoinTable(
-            name = "appointment_treatments",
+            name = "appointment_services",
             joinColumns = @JoinColumn(name = "app_id"),
             inverseJoinColumns = @JoinColumn(name = "serv_id")
     )
