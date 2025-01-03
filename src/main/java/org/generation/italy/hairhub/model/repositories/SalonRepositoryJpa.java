@@ -16,15 +16,9 @@ public interface SalonRepositoryJpa extends JpaRepository<Salon, Long> {
                 JOIN a.barber b
                 JOIN b.salon s
                 JOIN a.treatments t
-                WHERE (:type IS NULL
-                    OR :type IN (
-                        SELECT t2.type
-                        FROM a.treatments t2
-                    )
-                )
+                WHERE (:type IS NULL OR t.type = :type)
                 GROUP BY s
                 ORDER BY AVG(r.rating) DESC
-                LIMIT :num
             """)
     List<Salon> getSalonsByOptionalServiceType(@Param("type") Integer type, @Param("num") int num);
 
