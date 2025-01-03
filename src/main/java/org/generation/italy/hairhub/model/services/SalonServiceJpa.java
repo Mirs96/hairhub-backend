@@ -29,8 +29,11 @@ public class SalonServiceJpa implements SalonService {
 
     @Override
     public List<Salon> getTopSalons(Integer type, int num) {
-        return salonRepo.getSalonsByOptionalServiceType(type,num);
+        List<Salon> salons=  salonRepo.getSalonsByOptionalServiceType(type,num);
+        System.out.println("Found Salons: " + salons.size());  // Aggiungi questo per il debug
+        return salons;
     }
+
 
     @Override
     public List<Salon> getSalonsByNameOrAddress(String name) {
