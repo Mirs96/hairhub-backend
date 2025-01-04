@@ -1,5 +1,6 @@
 package org.generation.italy.hairhub.model.services;
 import org.generation.italy.hairhub.model.TreatmentWithPrice;
+import org.generation.italy.hairhub.model.entities.Barber;
 import org.generation.italy.hairhub.model.entities.Salon;
 import org.generation.italy.hairhub.model.entities.Treatment;
 
@@ -12,4 +13,10 @@ public interface SalonService {
     Optional<Salon> getSalonById(long id);
     List<Salon> getSalonsByTreatmentId(long treatmentId);
     List<TreatmentWithPrice> getTreatmentBySalon(long salonId);
+
+    List<Barber> getAllBarbersBySalonId(long salonId);
+    Salon getSalonByBarberId(long barberId);
+
+
 }
+

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class AppointmentServiceJpa implements AppointmentService {
     private TreatmentRepositoryJpa treatRepo;
     private UserRepositoryJpa userRepo;
     private SalonTreatmentRepositoryJpa salonTreatRepo;
+    private SalonRepositoryJpa salonRepo;
 
     @Autowired
     public AppointmentServiceJpa(AppointmentRepositoryJpa appRepo, BarberRepositoryJpa barberRepo, TreatmentRepositoryJpa treatRepo, UserRepositoryJpa userRepo, SalonTreatmentRepositoryJpa salonTreatRepo) {
@@ -88,5 +90,10 @@ public class AppointmentServiceJpa implements AppointmentService {
                 app.getEndTime(),
                 app.getStatus()
         );
+    }
+
+    @Override
+    public List<LocalDate> getAvailableDateForBarber(long barberId) {
+
     }
 }

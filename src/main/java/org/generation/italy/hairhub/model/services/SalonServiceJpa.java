@@ -1,6 +1,7 @@
 package org.generation.italy.hairhub.model.services;
 
 import org.generation.italy.hairhub.model.TreatmentWithPrice;
+import org.generation.italy.hairhub.model.entities.Barber;
 import org.generation.italy.hairhub.model.entities.Salon;
 import org.generation.italy.hairhub.model.entities.Treatment;
 import org.generation.italy.hairhub.model.repositories.SalonRepositoryJpa;
@@ -61,5 +62,9 @@ public class SalonServiceJpa implements SalonService {
             treatsWPrice.add(treatWPrice);
         }
         return treatsWPrice;
+    }
+    @Override
+    public List<Barber> getAllBarbersBySalonId(long salonId) {
+        return salonRepo.getBarbersBySalonId(salonId);
     }
 }

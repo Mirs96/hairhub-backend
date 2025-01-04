@@ -1,5 +1,6 @@
 package org.generation.italy.hairhub.model.repositories;
 
+import org.generation.italy.hairhub.model.entities.Barber;
 import org.generation.italy.hairhub.model.entities.Salon;
 import org.generation.italy.hairhub.model.entities.Treatment;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -49,4 +50,11 @@ public interface SalonRepositoryJpa extends JpaRepository<Salon, Long> {
                 WHERE :treatmentId = ANY (SELECT t.id FROM s.treatments t)
             """)
     List<Salon> findByTreatmentId(@Param("treatmentId") long treatmentId);
+
+
+    List<Barber> getBarbersBySalonId(long salonId);
+    Salon getSalonByBarberId(long barberId);
+
+
+
 }
