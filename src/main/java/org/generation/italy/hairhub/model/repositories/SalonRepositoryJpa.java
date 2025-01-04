@@ -51,9 +51,13 @@ public interface SalonRepositoryJpa extends JpaRepository<Salon, Long> {
             """)
     List<Salon> findByTreatmentId(@Param("treatmentId") long treatmentId);
 
+    @Query("""
+            SELECT b
+            FROM Barber b
+            WHERE b.salon.id = :salonId
+           """)
+    List<Barber> findBarbersBySalonId(@Param("salonId") long salonId);
 
-    List<Barber> getBarbersBySalonId(long salonId);
-    Salon getSalonByBarberId(long barberId);
 
 
 

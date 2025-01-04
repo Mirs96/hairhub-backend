@@ -7,8 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface AppointmentRepositoryJpa extends JpaRepository <Appointment, Long> {
-List<Appointment> findByBarberAndDateRange(long barberId, LocalDate today, LocalDate endDate);
-List<Appointment> findByBarberAndDate(long barberId, LocalDate date);
+List<Appointment> findByBarberIdAndDateBetween(long barberId, LocalDate today, LocalDate endDate);
+List<Appointment> findByBarberIdAndDate(long barberId, LocalDate date);
+
 
 
 }

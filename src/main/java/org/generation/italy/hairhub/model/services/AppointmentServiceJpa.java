@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -89,24 +90,26 @@ public class AppointmentServiceJpa implements AppointmentService {
     }
 
     @Override
-    public List<LocalTime> getAvailableTimesForBarber(long barberId, LocalDate date) {
-        List<Appointment> appointments = appRepo.findByBarberAndDate(barberId,date);
-        Salon salon = salonRepo.getSalonByBarberId(barberId);
+    public List<LocalTime> getAvailableTimesForBarber(long barberId, LocalDate date,int numberOfTreatments) throws EntityNotFoundException {
+        List<Appointment> appointments = appRepo.findByBarberIdAndDate(barberId,date);
+        Barber barber = barberRepo.findById(barberId).orElseThrow(()-> new EntityNotFoundException("entity not found",Barber.class.getName()));
+        Salon salon = barber.getSalon();
         LocalTime openingTime = salon.getOpeningTime();
         LocalTime closingTime = salon.getClosingTime();
-        List<LocalTime> availableTimes = generateAvailableTimes(openingTime,closingTime,appointments);
+        List<LocalTime> availableTimes = generateAvailableTimes(openingTime,closingTime,appointments,numberOfTreatments);
         return availableTimes;
     }
 
 
 
     @Override
-    public List<LocalDate> getAvailableDatesForBarber(long barberId,int monthToPrenote) {
+    public List<LocalDate> getAvailableDatesForBarber(long barberId,int bookingMonths, int numberOfTreatments) throws EntityNotFoundException {
         LocalDate today = LocalDate.now();
-        LocalDate endDate = today.plusMonths(monthToPrenote);
-        Salon salon = salonRepo.getSalonByBarberId(barberId);
+        LocalDate endDate = today.plusMonths(bookingMonths);
+        Barber barber = barberRepo.findById(barberId).orElseThrow(()-> new EntityNotFoundException("entity not found",Barber.class.getName()));
+        Salon salon = barber.getSalon();
         int closingDay = salon.getClosingDay();
-        List<Appointment> appointments = appRepo.findByBarberAndDateRange(barberId,today,endDate);
+        List<Appointment> appointments = appRepo.findByBarberIdAndDateBetween(barberId,today,endDate);
         Map<LocalDate,List<Appointment>> appointmentsByDate = new HashMap<>();
         for(Appointment appointment : appointments){
             LocalDate date = appointment.getDate();
@@ -122,7 +125,7 @@ public class AppointmentServiceJpa implements AppointmentService {
             }
             List<Appointment> dailyAppointments = appointmentsByDate.getOrDefault(date,new ArrayList<>());
             if(!dailyAppointments.isEmpty()) {
-                List<LocalTime> availableTimes = getAvailableTimesForBarber(barberId,date);
+                List<LocalTime> availableTimes = getAvailableTimesForBarber(barberId,date,numberOfTreatments);
                 if(availableTimes.isEmpty()) {
                     continue;
                 }
@@ -133,13 +136,14 @@ public class AppointmentServiceJpa implements AppointmentService {
         }
 
     @Override
-    public List<LocalTime> generateAvailableTimes(LocalTime openingTime, LocalTime closingTime, List<Appointment> appointments) {
+    public List<LocalTime> generateAvailableTimes(LocalTime openingTime, LocalTime closingTime, List<Appointment> appointments, int numberOfTreatments) {
+        Duration duration = Duration.ofMinutes(numberOfTreatments * 30);
        List<LocalTime> availableTimes = new ArrayList<>();
        LocalTime slot = openingTime;
-       while (!slot.isAfter(closingTime)){
+       while (!slot.plus(duration).isAfter(closingTime)){
            boolean isSlotTaken= false;
            for(Appointment appointment: appointments){
-               if(appointment.getStartTime().equals(slot)){
+               if(slot.isBefore(appointment.getEndTime()) && slot.plus(duration).isAfter(appointment.getStartTime())){
                    isSlotTaken = true;
                    break;
                }

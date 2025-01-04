@@ -65,6 +65,6 @@ public class SalonServiceJpa implements SalonService {
     }
     @Override
     public List<Barber> getAllBarbersBySalonId(long salonId) {
-        return salonRepo.getBarbersBySalonId(salonId);
+        return salonRepo.findBarbersBySalonId(salonId);
     }
 }

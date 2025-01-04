@@ -13,9 +13,9 @@ import java.util.Optional;
 public interface AppointmentService {
     Optional<Appointment> update(long id);
     AppointmentWithPrices create(Appointment app, long barberId, List<Long> treatmentsId, long userId) throws EntityNotFoundException;
-    List<LocalDate> getAvailableDatesForBarber(long barberId, int monthToPrenote);
-    List<LocalTime> getAvailableTimesForBarber(long barberId, LocalDate date);
-    List<LocalTime> generateAvailableTimes(LocalTime openingTime, LocalTime closingTime, List<Appointment> appointments);
+    List<LocalDate> getAvailableDatesForBarber(long barberId, int bookingMonths, int numberOfTreatments) throws EntityNotFoundException;
+    List<LocalTime> getAvailableTimesForBarber(long barberId, LocalDate date,int numberOfTreatments) throws EntityNotFoundException;
+    List<LocalTime> generateAvailableTimes(LocalTime openingTime, LocalTime closingTime, List<Appointment> appointments, int numberOfTreatments);
 
 
 
