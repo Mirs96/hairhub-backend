@@ -2,10 +2,7 @@ package org.generation.italy.hairhub.model.services;
 
 import org.generation.italy.hairhub.model.AppointmentWithPrices;
 import org.generation.italy.hairhub.model.TreatmentWithPrice;
-import org.generation.italy.hairhub.model.entities.Appointment;
-import org.generation.italy.hairhub.model.entities.Barber;
-import org.generation.italy.hairhub.model.entities.Treatment;
-import org.generation.italy.hairhub.model.entities.User;
+import org.generation.italy.hairhub.model.entities.*;
 import org.generation.italy.hairhub.model.exceptions.EntityNotFoundException;
 import org.generation.italy.hairhub.model.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AppointmentServiceJpa implements AppointmentService {
@@ -93,7 +89,67 @@ public class AppointmentServiceJpa implements AppointmentService {
     }
 
     @Override
-    public List<LocalDate> getAvailableDateForBarber(long barberId) {
+    public List<LocalTime> getAvailableTimesForBarber(long barberId, LocalDate date) {
+        List<Appointment> appointments = appRepo.findByBarberAndDate(barberId,date);
+        Salon salon = salonRepo.getSalonByBarberId(barberId);
+        LocalTime openingTime = salon.getOpeningTime();
+        LocalTime closingTime = salon.getClosingTime();
+        List<LocalTime> availableTimes = generateAvailableTimes(openingTime,closingTime,appointments);
+        return availableTimes;
+    }
 
+
+
+    @Override
+    public List<LocalDate> getAvailableDatesForBarber(long barberId,int monthToPrenote) {
+        LocalDate today = LocalDate.now();
+        LocalDate endDate = today.plusMonths(monthToPrenote);
+        Salon salon = salonRepo.getSalonByBarberId(barberId);
+        int closingDay = salon.getClosingDay();
+        List<Appointment> appointments = appRepo.findByBarberAndDateRange(barberId,today,endDate);
+        Map<LocalDate,List<Appointment>> appointmentsByDate = new HashMap<>();
+        for(Appointment appointment : appointments){
+            LocalDate date = appointment.getDate();
+            if(!appointmentsByDate.containsKey(date)){
+                appointmentsByDate.put(date, new ArrayList<>());
+            }
+            appointmentsByDate.get(date).add(appointment);
+        }
+        List<LocalDate> availableDates = new ArrayList<>();
+        for(LocalDate date = today; !date.isAfter(endDate);date = date.plusDays(1)){
+            if(date.getDayOfWeek().getValue() == closingDay){
+                continue;
+            }
+            List<Appointment> dailyAppointments = appointmentsByDate.getOrDefault(date,new ArrayList<>());
+            if(!dailyAppointments.isEmpty()) {
+                List<LocalTime> availableTimes = getAvailableTimesForBarber(barberId,date);
+                if(availableTimes.isEmpty()) {
+                    continue;
+                }
+            }
+            availableDates.add(date);
+        }
+            return availableDates;
+        }
+
+    @Override
+    public List<LocalTime> generateAvailableTimes(LocalTime openingTime, LocalTime closingTime, List<Appointment> appointments) {
+       List<LocalTime> availableTimes = new ArrayList<>();
+       LocalTime slot = openingTime;
+       while (!slot.isAfter(closingTime)){
+           boolean isSlotTaken= false;
+           for(Appointment appointment: appointments){
+               if(appointment.getStartTime().equals(slot)){
+                   isSlotTaken = true;
+                   break;
+               }
+           }
+           if (!isSlotTaken){
+               availableTimes.add(slot);
+           }
+           slot = slot.plusMinutes(30);
+       }
+       return availableTimes;
     }
 }
+

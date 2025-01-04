@@ -6,12 +6,17 @@ import org.generation.italy.hairhub.model.entities.Appointment;
 import org.generation.italy.hairhub.model.exceptions.EntityNotFoundException;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
 public interface AppointmentService {
     Optional<Appointment> update(long id);
     AppointmentWithPrices create(Appointment app, long barberId, List<Long> treatmentsId, long userId) throws EntityNotFoundException;
-    List<LocalDate> getAvailableDateForBarber(long barberId);
+    List<LocalDate> getAvailableDatesForBarber(long barberId, int monthToPrenote);
+    List<LocalTime> getAvailableTimesForBarber(long barberId, LocalDate date);
+    List<LocalTime> generateAvailableTimes(LocalTime openingTime, LocalTime closingTime, List<Appointment> appointments);
+
+
 
 }

@@ -13,10 +13,6 @@ public interface SalonService {
     Optional<Salon> getSalonById(long id);
     List<Salon> getSalonsByTreatmentId(long treatmentId);
     List<TreatmentWithPrice> getTreatmentBySalon(long salonId);
-
     List<Barber> getAllBarbersBySalonId(long salonId);
-    Salon getSalonByBarberId(long barberId);
-
-
 }
 

@@ -45,4 +45,5 @@ public class AppointmentController {
             return new ResponseEntity<>(e.getFullMessage(),HttpStatus.NOT_FOUND);
         }
     }
+
 }
