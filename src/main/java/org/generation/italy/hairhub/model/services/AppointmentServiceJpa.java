@@ -164,25 +164,54 @@ public class AppointmentServiceJpa implements AppointmentService {
        }
        return availableTimes;
     }
-}
 
-
-        return app;
+    @Override
+    public List<AppointmentWithPrices> getFutureAppointmentsByUserId(long userId) {
+        List<Appointment> appointments = appRepo.findFutureAppointmentsByUserId(userId, LocalDate.now());
+        List<TreatmentWithPrice> treatmentsPrice = new ArrayList<>();
+        List<AppointmentWithPrices> appointmentsPrice = new ArrayList<>();
+        for(Appointment appointment : appointments) {
+            List<Treatment> treatments = appointment.getTreatments();
+            for (Treatment t : treatments) {
+                double price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(appointment.getBarber().getSalon().getId(), t.getId());
+                treatmentsPrice.add(new TreatmentWithPrice(t, price));
+            }
+            appointmentsPrice.add(new AppointmentWithPrices(
+                    appointment.getId(),
+                    appointment.getUser(),
+                    appointment.getBarber(),
+                    treatmentsPrice,
+                    appointment.getDate(),
+                    appointment.getStartTime(),
+                    appointment.getEndTime(),
+                    appointment.getStatus()
+            ));
+        }
+        return appointmentsPrice;
     }
 
     @Override
-    public List<AppointmentDto> getFutureAppointmentsByUserId(long userId) {
-        return appRepo.findFutureAppointmentsByUserId(userId, LocalDate.now())
-                .stream()
-                .map(AppointmentDto::fromAppointment)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<AppointmentDto> getPastAppointmentsByUserId(long userId) {
-        return appRepo.findPastAppointmentsByUserId(userId, LocalDate.now())
-                .stream()
-                .map(AppointmentDto::fromAppointment)
-                .collect(Collectors.toList());
+    public List<AppointmentWithPrices> getPastAppointmentsByUserId(long userId) {
+        List<Appointment> appointments = appRepo.findPastAppointmentsByUserId(userId, LocalDate.now());
+        List<TreatmentWithPrice> treatmentsPrice = new ArrayList<>();
+        List<AppointmentWithPrices> appointmentsPrice = new ArrayList<>();
+        for(Appointment appointment : appointments) {
+            List<Treatment> treatments = appointment.getTreatments();
+            for (Treatment t : treatments) {
+                double price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(appointment.getBarber().getSalon().getId(), t.getId());
+                treatmentsPrice.add(new TreatmentWithPrice(t, price));
+            }
+            appointmentsPrice.add(new AppointmentWithPrices(
+                    appointment.getId(),
+                    appointment.getUser(),
+                    appointment.getBarber(),
+                    treatmentsPrice,
+                    appointment.getDate(),
+                    appointment.getStartTime(),
+                    appointment.getEndTime(),
+                    appointment.getStatus()
+            ));
+        }
+        return appointmentsPrice;
     }
 }

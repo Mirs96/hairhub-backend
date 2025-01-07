@@ -80,13 +80,15 @@ public class AppointmentController {
 
     @GetMapping("/future/{userId}")
     public ResponseEntity<List<AppointmentDto>> getFutureAppointmentsByUserId(@PathVariable long userId) {
-        List<AppointmentDto> appointmentsDto = appointmentService.getFutureAppointmentsByUserId(userId);
-        return ResponseEntity.ok(appointmentsDto);
+        List<AppointmentWithPrices> appointmentsP = appointmentService.getFutureAppointmentsByUserId(userId);
+        List<AppointmentDto> appointmentDtos = appointmentsP.stream().map(AppointmentDto::fromAppointmentWithPrice).toList();
+        return ResponseEntity.ok(appointmentDtos);
     }
 
     @GetMapping("/past/{userId}")
     public ResponseEntity<List<AppointmentDto>> getPastAppointmentsByUserId(@PathVariable long userId) {
-        List<AppointmentDto> appointmentsDto = appointmentService.getPastAppointmentsByUserId(userId);
-        return ResponseEntity.ok(appointmentsDto);
+        List<AppointmentWithPrices> appointmentsP = appointmentService.getPastAppointmentsByUserId(userId);
+        List<AppointmentDto> appointmentDtos = appointmentsP.stream().map(AppointmentDto::fromAppointmentWithPrice).toList();
+        return ResponseEntity.ok(appointmentDtos);
     }
 }
