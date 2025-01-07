@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 @RestController
 @RequestMapping("/appointment")
@@ -38,5 +39,17 @@ public class AppointmentController {
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(),HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/future/{userId}")
+    public ResponseEntity<List<AppointmentDto>> getFutureAppointmentsByUserId(@PathVariable long userId) {
+        List<AppointmentDto> appointmentsDto = appointmentService.getFutureAppointmentsByUserId(userId);
+        return ResponseEntity.ok(appointmentsDto);
+    }
+
+    @GetMapping("/past/{userId}")
+    public ResponseEntity<List<AppointmentDto>> getPastAppointmentsByUserId(@PathVariable long userId) {
+        List<AppointmentDto> appointmentsDto = appointmentService.getPastAppointmentsByUserId(userId);
+        return ResponseEntity.ok(appointmentsDto);
     }
 }
