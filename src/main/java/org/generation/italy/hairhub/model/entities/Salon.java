@@ -38,8 +38,9 @@ public class Salon {
     private Set<Barber> barbers; //qui viene usato un set, valutare se cambiarlo in lista per semplificare o lasciare così
 
     @OneToMany(mappedBy = "salon", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SalonTreatment> salonTreatments;
+    private List<SalonTreatment> treatments;
     // Getters and Setters
+
 
     public Salon(){}
 
@@ -54,7 +55,7 @@ public class Salon {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.barbers = barbers;
-        this.salonTreatments = salonTreatments;
+        this.treatments = salonTreatments;
     }
 
     public long getId() {
@@ -87,8 +88,8 @@ public class Salon {
     public Set<Barber> getBarbers() {
         return barbers;
     }
-    public List<SalonTreatment> getSalonTreatments() {
-        return salonTreatments;
+    public List<SalonTreatment> getTreatments() {
+        return treatments;
     }
 
     public void setId(long id) {
@@ -121,7 +122,7 @@ public class Salon {
     public void setBarbers(Set<Barber> barbers) {
         this.barbers = barbers;
     }
-    public void setSalonTreatments(List<SalonTreatment> salonTreatments) {
-        this.salonTreatments = salonTreatments;
+    public void setTreatments(List<SalonTreatment> treatments) {
+        this.treatments = treatments;
     }
 }
