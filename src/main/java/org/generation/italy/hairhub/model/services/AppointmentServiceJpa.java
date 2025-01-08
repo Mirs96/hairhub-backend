@@ -1,5 +1,10 @@
 package org.generation.italy.hairhub.model.services;
 
+import org.generation.italy.hairhub.dto.AppointmentDto;
+import org.generation.italy.hairhub.model.entities.Appointment;
+import org.generation.italy.hairhub.model.entities.Barber;
+import org.generation.italy.hairhub.model.entities.Treatment;
+import org.generation.italy.hairhub.model.entities.User;
 import org.generation.italy.hairhub.model.AppointmentWithPrices;
 import org.generation.italy.hairhub.model.TreatmentWithPrice;
 import org.generation.italy.hairhub.model.entities.*;
@@ -8,6 +13,10 @@ import org.generation.italy.hairhub.model.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -96,7 +105,7 @@ public class AppointmentServiceJpa implements AppointmentService {
         Salon salon = barber.getSalon();
         LocalTime openingTime = salon.getOpeningTime();
         LocalTime closingTime = salon.getClosingTime();
-        List<LocalTime> availableTimes = generateAvailableTimes(openingTime,closingTime,appointments,numberOfTreatments);
+        List<LocalTime> availableTimes = generateAvailableTimes(openingTime,closingTime,appointments,numberOfTreatments,date);
         return availableTimes;
     }
 
@@ -136,13 +145,23 @@ public class AppointmentServiceJpa implements AppointmentService {
         }
 
     @Override
-    public List<LocalTime> generateAvailableTimes(LocalTime openingTime, LocalTime closingTime, List<Appointment> appointments, int numberOfTreatments) {
+    public List<LocalTime> generateAvailableTimes(LocalTime openingTime, LocalTime closingTime, List<Appointment> appointments, int numberOfTreatments, LocalDate selectedDate) {
         Duration duration = Duration.ofMinutes(numberOfTreatments * 30);
        List<LocalTime> availableTimes = new ArrayList<>();
        LocalTime slot = openingTime;
+       LocalTime now = LocalTime.now();
+
+        if (selectedDate.equals(LocalDate.now()) && now.isAfter(openingTime)) {
+            slot = now.withMinute((now.getMinute() / 30) * 30).plusMinutes(30);
+            if (slot.isBefore(now)) {
+                slot = slot.plusMinutes(30);  // Se siamo in un minuto esatto come 11:30, dobbiamo passare al successivo
+            }
+        }
+
        while (!slot.plus(duration).isAfter(closingTime)){
            boolean isSlotTaken= false;
            for(Appointment appointment: appointments){
+
                if(slot.isBefore(appointment.getEndTime()) && slot.plus(duration).isAfter(appointment.getStartTime())){
                    isSlotTaken = true;
                    break;
@@ -155,5 +174,54 @@ public class AppointmentServiceJpa implements AppointmentService {
        }
        return availableTimes;
     }
-}
 
+    @Override
+    public List<AppointmentWithPrices> getFutureAppointmentsByUserId(long userId) {
+        List<Appointment> appointments = appRepo.findFutureAppointmentsByUserId(userId, LocalDate.now());
+        List<TreatmentWithPrice> treatmentsPrice = new ArrayList<>();
+        List<AppointmentWithPrices> appointmentsPrice = new ArrayList<>();
+        for(Appointment appointment : appointments) {
+            List<Treatment> treatments = appointment.getTreatments();
+            for (Treatment t : treatments) {
+                double price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(appointment.getBarber().getSalon().getId(), t.getId());
+                treatmentsPrice.add(new TreatmentWithPrice(t, price));
+            }
+            appointmentsPrice.add(new AppointmentWithPrices(
+                    appointment.getId(),
+                    appointment.getUser(),
+                    appointment.getBarber(),
+                    treatmentsPrice,
+                    appointment.getDate(),
+                    appointment.getStartTime(),
+                    appointment.getEndTime(),
+                    appointment.getStatus()
+            ));
+        }
+        return appointmentsPrice;
+    }
+
+    @Override
+    public List<AppointmentWithPrices> getPastAppointmentsByUserId(long userId) {
+        List<Appointment> appointments = appRepo.findPastAppointmentsByUserId(userId, LocalDate.now());
+        List<TreatmentWithPrice> treatmentsPrice = new ArrayList<>();
+        List<AppointmentWithPrices> appointmentsPrice = new ArrayList<>();
+        for(Appointment appointment : appointments) {
+            List<Treatment> treatments = appointment.getTreatments();
+            for (Treatment t : treatments) {
+                double price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(appointment.getBarber().getSalon().getId(), t.getId());
+                treatmentsPrice.add(new TreatmentWithPrice(t, price));
+            }
+            appointmentsPrice.add(new AppointmentWithPrices(
+                    appointment.getId(),
+                    appointment.getUser(),
+                    appointment.getBarber(),
+                    treatmentsPrice,
+                    appointment.getDate(),
+                    appointment.getStartTime(),
+                    appointment.getEndTime(),
+                    appointment.getStatus()
+            ));
+        }
+        return appointmentsPrice;
+    }
+}
