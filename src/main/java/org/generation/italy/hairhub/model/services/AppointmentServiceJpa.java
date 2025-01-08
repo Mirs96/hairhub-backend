@@ -105,7 +105,7 @@ public class AppointmentServiceJpa implements AppointmentService {
         Salon salon = barber.getSalon();
         LocalTime openingTime = salon.getOpeningTime();
         LocalTime closingTime = salon.getClosingTime();
-        List<LocalTime> availableTimes = generateAvailableTimes(openingTime,closingTime,appointments,numberOfTreatments);
+        List<LocalTime> availableTimes = generateAvailableTimes(openingTime,closingTime,appointments,numberOfTreatments,date);
         return availableTimes;
     }
 
@@ -145,13 +145,23 @@ public class AppointmentServiceJpa implements AppointmentService {
         }
 
     @Override
-    public List<LocalTime> generateAvailableTimes(LocalTime openingTime, LocalTime closingTime, List<Appointment> appointments, int numberOfTreatments) {
+    public List<LocalTime> generateAvailableTimes(LocalTime openingTime, LocalTime closingTime, List<Appointment> appointments, int numberOfTreatments, LocalDate selectedDate) {
         Duration duration = Duration.ofMinutes(numberOfTreatments * 30);
        List<LocalTime> availableTimes = new ArrayList<>();
        LocalTime slot = openingTime;
+       LocalTime now = LocalTime.now();
+
+        if (selectedDate.equals(LocalDate.now()) && now.isAfter(openingTime)) {
+            slot = now.withMinute((now.getMinute() / 30) * 30).plusMinutes(30);
+            if (slot.isBefore(now)) {
+                slot = slot.plusMinutes(30);  // Se siamo in un minuto esatto come 11:30, dobbiamo passare al successivo
+            }
+        }
+
        while (!slot.plus(duration).isAfter(closingTime)){
            boolean isSlotTaken= false;
            for(Appointment appointment: appointments){
+
                if(slot.isBefore(appointment.getEndTime()) && slot.plus(duration).isAfter(appointment.getStartTime())){
                    isSlotTaken = true;
                    break;
