@@ -71,7 +71,7 @@ public class AppointmentController {
             LocalDate parsedDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
             List<LocalTime> availableTimes = appointmentService.getAvailableTimesForBarber(barberId, parsedDate,numberOfTreatments);
             List<String> timeStrings = availableTimes.stream()
-                    .map(time -> time.format(DateTimeFormatter.ISO_LOCAL_TIME)).toList();
+                    .map(time -> time.format(DateTimeFormatter.ofPattern("HH:mm"))).toList();
             return ResponseEntity.ok(new AvailableTimesDto(timeStrings));
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
