@@ -6,6 +6,7 @@ import org.generation.italy.hairhub.model.entities.Appointment;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class CreateAppointmentDto {
@@ -34,12 +35,52 @@ public class CreateAppointmentDto {
         this.treatments = treatments;
     }
 
-    public Appointment toAppointment() { //restituisce un appointment da un dto
+    public Appointment toAppointment() {
+        // Aggiungi un log per capire se i campi sono nulli o vuoti
+        System.out.println("Date: " + this.date);
+        System.out.println("Start Time: " + this.startTime);
+        System.out.println("End Time: " + this.endTime);
+
+        // Verifica che la data e gli orari non siano nulli o vuoti
+        if (this.date == null || this.date.isEmpty()) {
+            throw new IllegalArgumentException("La data dell'appuntamento è obbligatoria");
+        }
+        if (this.startTime == null || this.startTime.isEmpty()) {
+            throw new IllegalArgumentException("L'orario di inizio è obbligatorio");
+        }
+        if (this.endTime == null || this.endTime.isEmpty()) {
+            throw new IllegalArgumentException("L'orario di fine è obbligatorio");
+        }
+
+        // Prova a parsare la data e gli orari con un blocco try-catch per gestire eventuali errori di formato
+        LocalDate parsedDate = null;
+        LocalTime parsedStartTime = null;
+        LocalTime parsedEndTime = null;
+
+        try {
+            parsedDate = LocalDate.parse(this.date);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Formato data non valido: " + this.date, e);
+        }
+
+        try {
+            parsedStartTime = LocalTime.parse(this.startTime);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Formato orario di inizio non valido: " + this.startTime, e);
+        }
+
+        try {
+            parsedEndTime = LocalTime.parse(this.endTime);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Formato orario di fine non valido: " + this.endTime, e);
+        }
+
+        // Creazione dell'oggetto Appointment
         Appointment appointment = new Appointment();
         appointment.setId(this.id);
-        appointment.setDate(LocalDate.parse(this.date));
-        appointment.setStartTime(LocalTime.parse(this.startTime));
-        appointment.setEndTime(LocalTime.parse(this.endTime));
+        appointment.setDate(parsedDate);
+        appointment.setStartTime(parsedStartTime);
+        appointment.setEndTime(parsedEndTime);
         appointment.setStatus(this.status);
 
         return appointment;
