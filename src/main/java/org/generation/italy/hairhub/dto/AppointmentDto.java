@@ -24,9 +24,8 @@ public class AppointmentDto {
 
 
     public AppointmentDto(){}
-    public AppointmentDto(long id, String userName, long userId, long barberId, String barberName, String date, String startTime, String endTime, String status,List<TreatmentDto> treatments) {
+    public AppointmentDto(long id, long userId, long barberId, String barberName, String date, String startTime, String endTime, String status,List<TreatmentDto> treatments) {
         this.id = id;
-        this.userName = userName;
         this.userId = userId;
         this.barberId = barberId;
         this.barberName = barberName;
@@ -49,7 +48,7 @@ public class AppointmentDto {
     }
 
     public static AppointmentDto fromAppointmentWithPrice(AppointmentWithPrices app) { //restituire appdto da appointmentWithPrices dato in input
-        return new AppointmentDto(app.getId(), app.getUser().getNickname(), app.getUser().getId(), app.getBarber().getId(),
+        return new AppointmentDto(app.getId(),app.getUser().getId(), app.getBarber().getId(),
                 String.format("%s %s", app.getBarber().getFirstname(), app.getBarber().getLastname()),
                 app.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE),
                 app.getStartTime().format(DateTimeFormatter.ISO_LOCAL_TIME),
