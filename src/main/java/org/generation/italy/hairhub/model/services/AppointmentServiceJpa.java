@@ -177,9 +177,9 @@ public class AppointmentServiceJpa implements AppointmentService {
     @Override
     public List<AppointmentWithPrices> getFutureAppointmentsByUserId(long userId) {
         List<Appointment> appointments = appRepo.findFutureAppointmentsByUserId(userId, LocalDate.now());
-        List<TreatmentWithPrice> treatmentsPrice = new ArrayList<>();
         List<AppointmentWithPrices> appointmentsPrice = new ArrayList<>();
         for(Appointment appointment : appointments) {
+            List<TreatmentWithPrice> treatmentsPrice = new ArrayList<>();
             List<Treatment> treatments = appointment.getTreatments();
             for (Treatment t : treatments) {
                 double price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(appointment.getBarber().getSalon().getId(), t.getId());
@@ -202,9 +202,9 @@ public class AppointmentServiceJpa implements AppointmentService {
     @Override
     public List<AppointmentWithPrices> getPastAppointmentsByUserId(long userId) {
         List<Appointment> appointments = appRepo.findPastAppointmentsByUserId(userId, LocalDate.now());
-        List<TreatmentWithPrice> treatmentsPrice = new ArrayList<>();
         List<AppointmentWithPrices> appointmentsPrice = new ArrayList<>();
         for(Appointment appointment : appointments) {
+            List<TreatmentWithPrice> treatmentsPrice = new ArrayList<>();
             List<Treatment> treatments = appointment.getTreatments();
             for (Treatment t : treatments) {
                 double price = salonTreatRepo.getPriceBySalonIdAndTreatmentId(appointment.getBarber().getSalon().getId(), t.getId());
