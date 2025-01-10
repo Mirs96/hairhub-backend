@@ -1,9 +1,6 @@
 package org.generation.italy.hairhub.controllers;
 
-import org.generation.italy.hairhub.dto.AppointmentDto;
-import org.generation.italy.hairhub.dto.AvailableDatesDto;
-import org.generation.italy.hairhub.dto.AvailableTimesDto;
-import org.generation.italy.hairhub.dto.TreatmentDto;
+import org.generation.italy.hairhub.dto.*;
 import org.generation.italy.hairhub.model.AppointmentWithPrices;
 import org.generation.italy.hairhub.model.entities.Appointment;
 import org.generation.italy.hairhub.model.exceptions.EntityNotFoundException;
@@ -79,16 +76,16 @@ public class AppointmentController {
     }
 
     @GetMapping("/future/{userId}")
-    public ResponseEntity<List<AppointmentDto>> getFutureAppointmentsByUserId(@PathVariable long userId) {
+    public ResponseEntity<List<AppointmentPriceDto>> getFutureAppointmentsByUserId(@PathVariable long userId) {
         List<AppointmentWithPrices> appointmentsP = appointmentService.getFutureAppointmentsByUserId(userId);
-        List<AppointmentDto> appointmentDtos = appointmentsP.stream().map(AppointmentDto::fromAppointmentWithPrice).toList();
-        return ResponseEntity.ok(appointmentDtos);
+        List<AppointmentPriceDto> appointmentPriceDtos = appointmentsP.stream().map(AppointmentPriceDto::fromAppointmentWithPrice).toList();
+        return ResponseEntity.ok(appointmentPriceDtos);
     }
 
     @GetMapping("/past/{userId}")
-    public ResponseEntity<List<AppointmentDto>> getPastAppointmentsByUserId(@PathVariable long userId) {
+    public ResponseEntity<List<AppointmentPriceDto>> getPastAppointmentsByUserId(@PathVariable long userId) {
         List<AppointmentWithPrices> appointmentsP = appointmentService.getPastAppointmentsByUserId(userId);
-        List<AppointmentDto> appointmentDtos = appointmentsP.stream().map(AppointmentDto::fromAppointmentWithPrice).toList();
-        return ResponseEntity.ok(appointmentDtos);
+        List<AppointmentPriceDto> appointmentPriceDtos = appointmentsP.stream().map(AppointmentPriceDto::fromAppointmentWithPrice).toList();
+        return ResponseEntity.ok(appointmentPriceDtos);
     }
 }
