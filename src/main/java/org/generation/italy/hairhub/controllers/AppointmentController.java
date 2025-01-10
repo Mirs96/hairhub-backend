@@ -37,10 +37,10 @@ public class AppointmentController {
         return ResponseEntity.notFound().build(); //notFound è quando proprio non trova nulla
     }
     @PostMapping
-    public ResponseEntity<?> createAppointment(@RequestBody AppointmentDto appDto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> createAppointment(@RequestBody CreateAppointmentDto appDto, UriComponentsBuilder uriBuilder) {
         Appointment app = appDto.toAppointment();
         try {
-            List<Long> treatmentsId = appDto.getTreatments().stream().map(TreatmentDto::getId).toList();
+            List<Long> treatmentsId = appDto.getTreatments();
             AppointmentWithPrices appPrice = appointmentService.create(app, appDto.getBarberId(), treatmentsId, appDto.getUserId());
             URI location = uriBuilder.path("/appointment/{id}").buildAndExpand(app.getId()).toUri();
             return ResponseEntity.created(location).body(AppointmentDto.fromAppointmentWithPrice(appPrice));
