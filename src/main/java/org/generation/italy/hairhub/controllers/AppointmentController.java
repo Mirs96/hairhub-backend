@@ -1,9 +1,6 @@
 package org.generation.italy.hairhub.controllers;
 
-import org.generation.italy.hairhub.dto.AppointmentDto;
-import org.generation.italy.hairhub.dto.AvailableDatesDto;
-import org.generation.italy.hairhub.dto.AvailableTimesDto;
-import org.generation.italy.hairhub.dto.TreatmentDto;
+import org.generation.italy.hairhub.dto.*;
 import org.generation.italy.hairhub.model.AppointmentWithPrices;
 import org.generation.italy.hairhub.model.entities.Appointment;
 import org.generation.italy.hairhub.model.exceptions.EntityNotFoundException;
@@ -40,10 +37,11 @@ public class AppointmentController {
         return ResponseEntity.notFound().build(); //notFound è quando proprio non trova nulla
     }
     @PostMapping
-    public ResponseEntity<?> createAppointment(@RequestBody AppointmentDto appDto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> createAppointment(@RequestBody CreateAppointmentDto appDto, UriComponentsBuilder uriBuilder) {
+        System.out.println("Ricevuto DTo" + appDto.getDate() + appDto.getStartTime() + appDto.getEndTime());
         Appointment app = appDto.toAppointment();
         try {
-            List<Long> treatmentsId = appDto.getTreatments().stream().map(TreatmentDto::getId).toList();
+            List<Long> treatmentsId = appDto.getTreatments();
             AppointmentWithPrices appPrice = appointmentService.create(app, appDto.getBarberId(), treatmentsId, appDto.getUserId());
             URI location = uriBuilder.path("/appointment/{id}").buildAndExpand(app.getId()).toUri();
             return ResponseEntity.created(location).body(AppointmentDto.fromAppointmentWithPrice(appPrice));
