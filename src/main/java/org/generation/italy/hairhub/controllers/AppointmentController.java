@@ -5,6 +5,7 @@ import org.generation.italy.hairhub.model.AppointmentWithPrices;
 import org.generation.italy.hairhub.model.entities.Appointment;
 import org.generation.italy.hairhub.model.exceptions.EntityNotFoundException;
 import org.generation.italy.hairhub.model.services.AppointmentService;
+import org.generation.italy.hairhub.model.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -24,9 +26,11 @@ import java.util.Optional;
 @RequestMapping("/appointment")
 public class AppointmentController {
     private AppointmentService appointmentService;
+    private ReviewService reviewService;
     @Autowired
-    public AppointmentController(AppointmentService appointmentService) {
+    public AppointmentController(AppointmentService appointmentService, ReviewService reviewService) {
         this.appointmentService = appointmentService;
+        this.reviewService = reviewService;
     }
     @PutMapping("/{id}")
     public ResponseEntity<Void> cancelAppointment(@PathVariable long id) {
@@ -83,9 +87,24 @@ public class AppointmentController {
     }
 
     @GetMapping("/past/{userId}")
-    public ResponseEntity<List<AppointmentPriceDto>> getPastAppointmentsByUserId(@PathVariable long userId) {
+    public ResponseEntity<?> getPastAppointmentsByUserId(@PathVariable long userId) {
         List<AppointmentWithPrices> appointmentsP = appointmentService.getPastAppointmentsByUserId(userId);
-        List<AppointmentPriceDto> appointmentPriceDtos = appointmentsP.stream().map(AppointmentPriceDto::fromAppointmentWithPrice).toList();
-        return ResponseEntity.ok(appointmentPriceDtos);
+        List<AppointmentReviewDto> appointmentDtos = new ArrayList<>();
+
+        for (AppointmentWithPrices a : appointmentsP) {
+            try {
+                // Chiama la funzione isReviewPossible per verificare se è possibile fare una recensione
+                boolean canReview = reviewService.isReviewPossible(a.getId());
+                // Crea il DTO passando anche il parametro canReview
+                AppointmentReviewDto dto = AppointmentReviewDto.fromAppointmentWithPrice(a, canReview);
+                appointmentDtos.add(dto);
+            } catch (EntityNotFoundException e) {
+                // In caso di errore (ad esempio se l'appuntamento non esiste)
+                return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+            }
+        }
+
+        return ResponseEntity.ok(appointmentDtos);
     }
+
 }

@@ -20,10 +20,24 @@ public class AppointmentDto {
     private String startTime;
     private String endTime;
     private String status;
+    private boolean canReview;
     private List<TreatmentDto> treatments;
 
 
     public AppointmentDto(){}
+    public AppointmentDto(long id, long userId, long barberId, String barberName, String date, String startTime, String endTime, String status,boolean canReview,List<TreatmentDto> treatments) {
+        this.id = id;
+        this.userId = userId;
+        this.barberId = barberId;
+        this.barberName = barberName;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.status = status;
+        this.canReview = canReview;
+        this.treatments = treatments;
+    }
+
     public AppointmentDto(long id, long userId, long barberId, String barberName, String date, String startTime, String endTime, String status,List<TreatmentDto> treatments) {
         this.id = id;
         this.userId = userId;
@@ -46,6 +60,8 @@ public class AppointmentDto {
 
         return appointment;
     }
+
+
 
     public static AppointmentDto fromAppointmentWithPrice(AppointmentWithPrices app) { //restituire appdto da appointmentWithPrices dato in input
         return new AppointmentDto(app.getId(),app.getUser().getId(), app.getBarber().getId(),
@@ -83,6 +99,9 @@ public class AppointmentDto {
     public String getStatus() {
         return status;
     }
+    public boolean isCanReview() {
+        return canReview;
+    }
 
     public List<TreatmentDto> getTreatments() {
         return treatments;
@@ -118,5 +137,8 @@ public class AppointmentDto {
     }
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+    public void setCanReview(boolean canReview) {
+        this.canReview = canReview;
     }
 }
