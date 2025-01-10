@@ -33,14 +33,14 @@ public class ReviewController {
         return ResponseEntity.ok(ReviewDto.fromReviews(reviews));
     }
     @GetMapping("/{appointmentId}")
-    public ResponseEntity<Boolean> getReviewByAppointment(@PathVariable long appointmentId) {
+    public ResponseEntity<?> checkReviewEligibility(@PathVariable long appointmentId) {
         try {
-            Review review = reviewService.getReviewByAppointment(appointmentId);
-            return ResponseEntity.ok(ReviewDto.fromReview(review));
+            boolean hasReview = reviewService.isReviewPossible(appointmentId);
+            return ResponseEntity.ok(hasReview);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
         }catch (IllegalStateException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+            return  ResponseEntity.status(HttpStatus.FORBIDDEN).body(false);
         }
     }
 

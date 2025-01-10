@@ -43,23 +43,14 @@ public class ReviewServiceJpa implements ReviewService {
     }
 
     @Override
-    public Boolean appointmentHasReview(long appointmentId) throws EntityNotFoundException {
-        Optional<Appointment> app = appRepo.findById(appointmentId);
-
-        // Verifica se l'appuntamento è presente
-        if (app.isEmpty()) {
-            throw new EntityNotFoundException("Appointment not found", Appointment.class.getName());
-        }
-
-        // Se l'appuntamento è stato cancellato, non è possibile lasciare una recensione
-        if (app.get().getStatus().equals("Cancelled")) {
+    public boolean isReviewPossible(long appointmentId) throws EntityNotFoundException {
+        Appointment appointment = appRepo.findById(appointmentId) // Trova l'appuntamento o lancia un'eccezione se non esiste
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found", Appointment.class.getName()));
+        if ("Cancelled".equals(appointment.getStatus())) { // Controlla se lo stato dell'appuntamento è "Cancelled"
             return false;
         }
+        Optional<Review> review = reviewRepository.findByAppointmentId(appointmentId); // Controlla se esiste già una recensione per l'appuntamento
 
-        // Verifica se esiste una recensione per questo appuntamento
-        Optional<Review> review = reviewRepository.findByAppointmentId(appointmentId);
-
-        // Se esiste una recensione, ritorna true, altrimenti false
-        return review.isPresent();
+        return review.isEmpty();// Una recensione è possibile solo se non esiste già
     }
 }
