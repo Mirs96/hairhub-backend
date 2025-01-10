@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewRepositoryJpa extends JpaRepository<Review, Long> {
     @Query("""
@@ -18,4 +19,7 @@ public interface ReviewRepositoryJpa extends JpaRepository<Review, Long> {
             WHERE s.id = :salonId
             """)
     List<Review> findReviewsBySalonId(@Param("salonId") long salonId);
+
+
+    Optional<Review> findByAppointmentId(long appointmentId);
 }
