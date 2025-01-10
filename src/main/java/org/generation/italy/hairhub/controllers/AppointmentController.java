@@ -38,7 +38,6 @@ public class AppointmentController {
     }
     @PostMapping
     public ResponseEntity<?> createAppointment(@RequestBody CreateAppointmentDto appDto, UriComponentsBuilder uriBuilder) {
-        System.out.println("Ricevuto DTo" + appDto.getDate() + appDto.getStartTime() + appDto.getEndTime());
         Appointment app = appDto.toAppointment();
         try {
             List<Long> treatmentsId = appDto.getTreatments();
