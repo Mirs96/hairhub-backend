@@ -10,43 +10,51 @@ public class AppointmentReviewDto {
     private String userName;
     private long userId;
     private long barberId;
+    private long salonId;
+    private String salonName;
     private String barberName;
     private String date;
     private String startTime;
     private String endTime;
     private String status;
-    private boolean canReview;
     private List<TreatmentDto> treatments;
+
+    private boolean canReview;
 
 
     public AppointmentReviewDto(){}
-    public AppointmentReviewDto(long id, long userId, long barberId,String userName, String barberName, String date, String startTime, String endTime, String status,boolean canReview,List<TreatmentDto> treatments) {
+
+    public AppointmentReviewDto(long id, String userName, long userId, long barberId, long salonId, String salonName, String barberName, String date, String startTime, String endTime, String status, List<TreatmentDto> treatments, boolean canReview) {
         this.id = id;
+        this.userName = userName;
         this.userId = userId;
         this.barberId = barberId;
-        this.userName = userName;
+        this.salonId = salonId;
+        this.salonName = salonName;
         this.barberName = barberName;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
-        this.canReview = canReview;
         this.treatments = treatments;
+        this.canReview = canReview;
     }
 
     public static AppointmentReviewDto fromAppointmentWithPrice(AppointmentReviewInfo app) {
         return new AppointmentReviewDto(
                 app.getAppointment().getId(),
+                app.getAppointment().getUser().getNickname(),
                 app.getAppointment().getUser().getId(),
                 app.getAppointment().getBarber().getId(),
+                app.getAppointment().getBarber().getSalon().getId(),
+                app.getAppointment().getBarber().getSalon().getName(),
                 app.getAppointment().getBarber().getFirstname() + " " + app.getAppointment().getBarber().getLastname(),
-                app.getAppointment().getUser().getNickname(),
-                app.getAppointment().getDate().toString(), // Convert LocalDate to String
-                app.getAppointment().getStartTime().toString(), // Convert LocalTime to String
-                app.getAppointment().getEndTime().toString(), // Convert LocalTime to String
+                app.getAppointment().getDate().toString(),
+                app.getAppointment().getStartTime().toString(),
+                app.getAppointment().getEndTime().toString(),
                 app.getAppointment().getStatus(),
-                app.isCanReview(),
-                app.getAppointment().getTreatments().stream().map(TreatmentDto::new).toList()
+                app.getAppointment().getTreatments().stream().map(TreatmentDto::new).toList(),
+                app.isCanReview()
         );
     }
 
@@ -129,6 +137,22 @@ public class AppointmentReviewDto {
 
     public void setTreatments(List<TreatmentDto> treatments) {
         this.treatments = treatments;
+    }
+
+    public long getSalonId() {
+        return salonId;
+    }
+
+    public void setSalonId(long salonId) {
+        this.salonId = salonId;
+    }
+
+    public String getSalonName() {
+        return salonName;
+    }
+
+    public void setSalonName(String salonName) {
+        this.salonName = salonName;
     }
 
     public String getStatus() {
