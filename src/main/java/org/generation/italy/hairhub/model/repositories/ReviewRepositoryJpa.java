@@ -11,12 +11,12 @@ import java.util.Optional;
 
 public interface ReviewRepositoryJpa extends JpaRepository<Review, Long> {
     @Query("""
-            SELECT r
-            FROM Review r
-            JOIN r.appointment a
-            JOIN a.barber b
-            JOIN b.salon s
-            WHERE s.id = :salonId
+                SELECT r
+                FROM Review r
+                JOIN r.appointment a
+                JOIN a.barber b
+                JOIN b.salon s
+                WHERE s.id = :salonId
             """)
     List<Review> findReviewsBySalonId(@Param("salonId") long salonId);
 

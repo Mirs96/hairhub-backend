@@ -1,6 +1,7 @@
 package org.generation.italy.hairhub.controllers;
 
 import org.generation.italy.hairhub.dto.*;
+import org.generation.italy.hairhub.model.AppointmentReviewInfo;
 import org.generation.italy.hairhub.model.AppointmentWithPrices;
 import org.generation.italy.hairhub.model.entities.Appointment;
 import org.generation.italy.hairhub.model.exceptions.EntityNotFoundException;
@@ -88,20 +89,12 @@ public class AppointmentController {
 
     @GetMapping("/past/{userId}")
     public ResponseEntity<?> getPastAppointmentsByUserId(@PathVariable long userId) {
-        List<AppointmentWithPrices> appointmentsP = appointmentService.getPastAppointmentsByUserId(userId);
+        List<AppointmentReviewInfo> appointmentsR = appointmentService.getPastAppointmentsByUserId(userId);
         List<AppointmentReviewDto> appointmentDtos = new ArrayList<>();
 
-        for (AppointmentWithPrices a : appointmentsP) {
-            try {
-                // Chiama la funzione isReviewPossible per verificare se è possibile fare una recensione
-                boolean canReview = reviewService.isReviewPossible(a.getId());
-                // Crea il DTO passando anche il parametro canReview
-                AppointmentReviewDto dto = AppointmentReviewDto.fromAppointmentWithPrice(a, canReview);
-                appointmentDtos.add(dto);
-            } catch (EntityNotFoundException e) {
-                // In caso di errore (ad esempio se l'appuntamento non esiste)
-                return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
-            }
+        for (AppointmentReviewInfo a : appointmentsR) {
+            AppointmentReviewDto dto = AppointmentReviewDto.fromAppointmentWithPrice(a);
+            appointmentDtos.add(dto);
         }
 
         return ResponseEntity.ok(appointmentDtos);

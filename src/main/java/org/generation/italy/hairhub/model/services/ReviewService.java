@@ -9,5 +9,4 @@ import java.util.Optional;
 public interface ReviewService {
     List<Review> getReviewsBySalonId(long salonId);
     Review createReview(Review review,long appId) throws EntityNotFoundException;
-    boolean isReviewPossible(long appointmentId) throws EntityNotFoundException;
 }

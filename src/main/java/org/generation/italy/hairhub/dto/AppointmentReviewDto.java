@@ -1,5 +1,6 @@
 package org.generation.italy.hairhub.dto;
 
+import org.generation.italy.hairhub.model.AppointmentReviewInfo;
 import org.generation.italy.hairhub.model.AppointmentWithPrices;
 
 import java.util.List;
@@ -33,19 +34,19 @@ public class AppointmentReviewDto {
         this.treatments = treatments;
     }
 
-    public static AppointmentReviewDto fromAppointmentWithPrice(AppointmentWithPrices appointment, boolean canReview) {
+    public static AppointmentReviewDto fromAppointmentWithPrice(AppointmentReviewInfo app) {
         return new AppointmentReviewDto(
-                appointment.getId(),
-                appointment.getUser().getId(),
-                appointment.getBarber().getId(),
-                appointment.getBarber().getFirstname() + " " + appointment.getBarber().getLastname(),
-                appointment.getUser().getNickname(),
-                appointment.getDate().toString(), // Convert LocalDate to String
-                appointment.getStartTime().toString(), // Convert LocalTime to String
-                appointment.getEndTime().toString(), // Convert LocalTime to String
-                appointment.getStatus(),
-                canReview,
-                appointment.getTreatments().stream().map(TreatmentDto::new).toList()
+                app.getAppointment().getId(),
+                app.getAppointment().getUser().getId(),
+                app.getAppointment().getBarber().getId(),
+                app.getAppointment().getBarber().getFirstname() + " " + app.getAppointment().getBarber().getLastname(),
+                app.getAppointment().getUser().getNickname(),
+                app.getAppointment().getDate().toString(), // Convert LocalDate to String
+                app.getAppointment().getStartTime().toString(), // Convert LocalTime to String
+                app.getAppointment().getEndTime().toString(), // Convert LocalTime to String
+                app.getAppointment().getStatus(),
+                app.isCanReview(),
+                app.getAppointment().getTreatments().stream().map(TreatmentDto::new).toList()
         );
     }
 

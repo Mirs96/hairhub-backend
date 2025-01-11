@@ -32,17 +32,7 @@ public class ReviewController {
         List<Review> reviews = reviewService.getReviewsBySalonId(id);
         return ResponseEntity.ok(ReviewDto.fromReviews(reviews));
     }
-    @GetMapping("/{appointmentId}")
-    public ResponseEntity<?> checkReviewEligibility(@PathVariable long appointmentId) {
-        try {
-            boolean hasReview = reviewService.isReviewPossible(appointmentId);
-            return ResponseEntity.ok(hasReview);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-        }catch (IllegalStateException e){
-            return  ResponseEntity.status(HttpStatus.FORBIDDEN).body(false);
-        }
-    }
+
 
     @PostMapping
     public ResponseEntity<?> createReview(@RequestBody ReviewDto reviewDto, UriComponentsBuilder uriBuilder) {

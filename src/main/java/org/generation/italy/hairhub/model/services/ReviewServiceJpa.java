@@ -42,15 +42,4 @@ public class ReviewServiceJpa implements ReviewService {
 
     }
 
-    @Override
-    public boolean isReviewPossible(long appointmentId) throws EntityNotFoundException {
-        Appointment appointment = appRepo.findById(appointmentId) // Trova l'appuntamento o lancia un'eccezione se non esiste
-                .orElseThrow(() -> new EntityNotFoundException("Appointment not found", Appointment.class.getName()));
-        if ("Cancelled".equals(appointment.getStatus())) { // Controlla se lo stato dell'appuntamento è "Cancelled"
-            return false;
-        }
-        Optional<Review> review = reviewRepository.findByAppointmentId(appointmentId); // Controlla se esiste già una recensione per l'appuntamento
-
-        return review.isEmpty();// Una recensione è possibile solo se non esiste già
-    }
 }
